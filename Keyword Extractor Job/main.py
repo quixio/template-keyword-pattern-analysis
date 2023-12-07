@@ -3,8 +3,8 @@ from keybert import KeyBERT
 from keyphrase_vectorizers import KeyphraseCountVectorizer
 import ray
 import modin.pandas as pd
-from kafka import KafkaProducer
 import os
+import quixstreams as qx
 
 # Initialize Ray
 ray.init()
@@ -52,5 +52,3 @@ with open('r_dataengineering_comments.jsonl', 'r', encoding='utf-8') as file:
         process_and_send(df_row)
 
 # Ensure all messages are sent before closing the producer
-producer.flush()
-producer.close()
