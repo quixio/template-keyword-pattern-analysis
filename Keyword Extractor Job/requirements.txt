@@ -1,5 +1,5 @@
 quixstreams==0.5.7
-modin[all]
+# modin[all]
 keybert
 keyphrase-vectorizers==0.0.11
 requests
