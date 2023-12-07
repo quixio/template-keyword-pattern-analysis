@@ -1,6 +1,5 @@
 import requests
 import zipfile
-import io
 
 def download_file_from_google_drive(id, destination):
     URL = "https://drive.google.com/uc?export=download"
@@ -30,12 +29,12 @@ def save_response_content(response, destination):
                 f.write(chunk)
 
 # Google Drive ID of the file
-file_id = 'YOUR_FILE_ID'
+file_id = '1eIdeNAOe40JN3Ogz7okoGuW_h7ToYjyj'
 # Destination where you want to save the zip file
-destination = 'path/to/your/file.zip'
+destination = 'r_dataengineering.zip'
 
 download_file_from_google_drive(file_id, destination)
 
 # Unzip the file
 with zipfile.ZipFile(destination, 'r') as zip_ref:
-    zip_ref.extractall('path/to/extract/directory')
+    zip_ref.extractall('.')
