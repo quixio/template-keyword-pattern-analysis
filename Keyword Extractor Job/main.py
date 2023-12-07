@@ -8,6 +8,7 @@ import gdown
 # gdown.download(url, output, quiet=False)
 
 zip_file_path = 'r_dataengineering.zip'
+extract_path = '.'
 
 # Unzip the file
 with zipfile.ZipFile(zip_file_path, 'r') as zip_ref:
