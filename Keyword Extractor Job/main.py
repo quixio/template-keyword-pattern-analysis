@@ -2,7 +2,7 @@ import json
 from keybert import KeyBERT
 from keyphrase_vectorizers import KeyphraseCountVectorizer
 import ray
-import modin.pandas as pd
+import pandas as pd
 import os
 import quixstreams as qx
 import gdown
