@@ -1,40 +1,56 @@
-import requests
-import zipfile
+import json
+from keybert import KeyBERT
+from keyphrase_vectorizers import KeyphraseCountVectorizer
+import ray
+import modin.pandas as pd
+import os
+import quixstreams as qx
 
-def download_file_from_google_drive(id, destination):
-    URL = "https://drive.google.com/uc?export=download"
+# Initialize Ray
+ray.init()
 
-    session = requests.Session()
-    response = session.get(URL, params={'id': id}, stream=True)
-    token = get_confirm_token(response)
+# Initialize KeyBERT model
+kw_model = KeyBERT()
 
-    if token:
-        params = {'id': id, 'confirm': token}
-        response = session.get(URL, params=params, stream=True)
+# Initialize Kafka producer
+client = qx.QuixStreamingClient()
 
-    save_response_content(response, destination)
+# Open the output topic where to write data out
+topic_producer = client.get_topic_producer(topic_id_or_name = os.environ["output"])
 
-def get_confirm_token(response):
-    for key, value in response.cookies.items():
-        if key.startswith('download_warning'):
-            return value
-    return None
 
-def save_response_content(response, destination):
-    CHUNK_SIZE = 32768
+def extract_keywords_with_error_handling(doc):
+    try:
+        return kw_model.extract_keywords(doc, vectorizer=KeyphraseCountVectorizer(pos_pattern='<N.*>+'))
+    except Exception as e:
+        print(f"Error because: {e}")
+        return None
 
-    with open(destination, "wb") as f:
-        for chunk in response.iter_content(CHUNK_SIZE):
-            if chunk:  # filter out keep-alive new chunks
-                f.write(chunk)
+# Function to process and send each row to Kafka
+def process_and_send(row):
+    # Process the row
+    row_basic = row[['created_utc', 'parent_id', 'author', 'body']].copy()
+    row_basic  = row_basic .rename(columns={"created_utc": "timestamp"})
+    row_basic['human_timestamp'] = pd.to_datetime(row_basic['timestamp'], unit='s')
+    row_basic['word_count'] = row_basic['body'].str.split().apply(len)
+    row_basic['extracted_keywords'] = extract_keywords_with_error_handling(row_basic['body'])
+    
 
-# Google Drive ID of the file
-file_id = '1eIdeNAOe40JN3Ogz7okoGuW_h7ToYjyj'
-# Destination where you want to save the zip file
-destination = 'r_dataengineering.zip'
+    # Send processed data to Kafka
+    # Set stream ID or leave parameters empty to get stream ID generated.
+    stream_producer = topic_producer.get_or_create_stream(row_basic['parent_id'])
+    stream_producer.properties.name = "Keyword Extraction"
 
-download_file_from_google_drive(file_id, destination)
+     # publish the data to the Quix stream created earlier
+    stream_producer.timeseries.publish(row_basic)
 
-# Unzip the file
-with zipfile.ZipFile(destination, 'r') as zip_ref:
-    zip_ref.extractall('.')
+# Read the JSONL file and process each line
+with open('r_dataengineering_comments.jsonl', 'r', encoding='utf-8') as file:
+    for line in file:
+        json_data = json.loads(line)
+        df_row = pd.DataFrame([json_data])
+        process_and_send(df_row)
+
+# Ensure all messages are sent before closing the producer
+print("Closing stream")
+stream.close()
