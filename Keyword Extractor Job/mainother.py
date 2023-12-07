@@ -5,7 +5,8 @@ import ray
 import modin.pandas as pd
 import os
 import quixstreams as qx
-
+import gdown
+import zipfile
 # Initialize Ray
 ray.init()
 
@@ -14,6 +15,17 @@ kw_model = KeyBERT()
 
 # Initialize Kafka producer
 client = qx.QuixStreamingClient()
+
+# Download and extract file
+url = 'https://drive.google.com/uc?id=1eIdeNAOe40JN3Ogz7okoGuW_h7ToYjyj'
+output = './r_dataengineering.zip'
+gdown.download(url, output, quiet=False)
+zip_file_path = './r_dataengineering.zip'
+extract_path = '.'
+# Unzip the file
+with zipfile.ZipFile(zip_file_path, 'r') as zip_ref:
+     zip_ref.extractall(extract_path)
+print('Download and extraction complete.')
 
 # Open the output topic where to write data out
 topic_producer = client.get_topic_producer(topic_id_or_name = os.environ["output"])
