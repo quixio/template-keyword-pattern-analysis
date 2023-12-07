@@ -35,13 +35,10 @@ def process_and_send(row):
     row_basic['word_count'] = row_basic['body'].str.split().apply(len)
     row_basic['extracted_keywords'] = extract_keywords_with_error_handling(row_basic['body'])
     
-    # Convert row to dictionary and add process ID
-    processed_data = row_basic.to_dict('records')[0]
-    processed_data['process_id'] = os.getpid()
-    
+
     # Send processed data to Kafka
     # Set stream ID or leave parameters empty to get stream ID generated.
-    stream_producer = topic_producer.get_or_create_stream(row_basic[])
+    stream_producer = topic_producer.get_or_create_stream(row_basic['parent_id'])
     stream_producer.properties.name = "Keyword Extraction"
 
      # publish the data to the Quix stream created earlier
