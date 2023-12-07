@@ -4,11 +4,11 @@ import gdown
 
 url = 'https://drive.google.com/uc?id=1eIdeNAOe40JN3Ogz7okoGuW_h7ToYjyj'
 #url = 'https://drive.google.com/file/d/1eIdeNAOe40JN3Ogz7okoGuW_h7ToYjyj/view?usp=drive_link'
-output = './files/r_dataengineering.zip'
+output = './r_dataengineering.zip'
 gdown.download(url, output, quiet=False)
 
-zip_file_path = './files/r_dataengineering.zip'
-extract_path = './files'
+zip_file_path = './r_dataengineering.zip'
+extract_path = '.'
 
 # Unzip the file
 with zipfile.ZipFile(zip_file_path, 'r') as zip_ref:
