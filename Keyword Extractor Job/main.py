@@ -14,8 +14,6 @@ extract_path = '.'
 response = requests.get(direct_link, stream=True)
 response.raise_for_status()  # Ensure the download was successful
 
-# Get the total file size in bytes
-total_size = int(response.headers.get('content-length', 0))
 chunk_size = 1024  # 1 kilobyte
 total_downloaded = 0
 
@@ -27,7 +25,7 @@ with open(zip_file_path, 'wb') as file:
         # Update the total number of bytes downloaded
         total_downloaded += len(chunk)
         # Print the progress
-        print(f'Downloaded {total_downloaded} of {total_size} bytes', end='\r')
+        print(f'Downloaded {total_downloaded} bytes', end='\r')
 
 # Unzip the file
 # with zipfile.ZipFile(zip_file_path, 'r') as zip_ref:
