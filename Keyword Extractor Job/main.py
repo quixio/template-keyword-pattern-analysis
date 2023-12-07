@@ -61,6 +61,7 @@ def process_and_send(row):
 
     # publish the data to the Quix stream created earlier
     stream_producer.timeseries.publish(row_basic_pandas)
+    print(f"Published: {row_basic_pandas}")
 
 # Read the JSONL file and process each line
 with open('r_dataengineering_comments.jsonl', 'r', encoding='utf-8') as file:
