@@ -2,8 +2,8 @@ import requests
 import zipfile
 import gdown
 
-url = 'https://drive.google.com/uc?id=0B9P1L--7Wd2vNm9zMTJWOGxobkU'
-url = 'https://drive.google.com/file/d/1eIdeNAOe40JN3Ogz7okoGuW_h7ToYjyj/view?usp=drive_link'
+url = 'https://drive.google.com/uc?id=1eIdeNAOe40JN3Ogz7okoGuW_h7ToYjyj'
+#url = 'https://drive.google.com/file/d/1eIdeNAOe40JN3Ogz7okoGuW_h7ToYjyj/view?usp=drive_link'
 output = 'r_dataengineering.zip'
 gdown.download(url, output, quiet=False)
 
