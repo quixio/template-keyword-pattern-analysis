@@ -57,11 +57,11 @@ def process_and_send(row):
     stream_producer.properties.name = row_basic['parent_id'].iloc[0]
 
     # Convert Modin DataFrame to pandas DataFrame before publishing
-    row_basic_pandas = row_basic._to_pandas()
+    # row_basic_pandas = row_basic._to_pandas()
 
     # publish the data to the Quix stream created earlier
-    stream_producer.timeseries.publish(row_basic_pandas)
-    print(f"Published: {row_basic_pandas}")
+    stream_producer.timeseries.publish(row_basic)
+    print(f"Published: {row_basic}")
 
 # Read the JSONL file and process each line
 with open('r_dataengineering_comments.jsonl', 'r', encoding='utf-8') as file:
