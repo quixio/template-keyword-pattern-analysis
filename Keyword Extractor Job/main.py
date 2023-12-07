@@ -47,9 +47,13 @@ def process_and_send(row):
         row_basic = row_basic.rename(columns={"created_utc": "timestamp"})
         row_basic['human_timestamp'] = pd.to_datetime(row_basic['timestamp'], unit='s')
         row_basic['word_count'] = row_basic['body'].str.split().apply(len)
-        
+    except Exception as e:
+        print(f"Parse row failed because: {e}")   
+
         # Extract keywords and wrap the list in another list to treat it as a single element
         extracted_keywords = extract_keywords_with_error_handling(row_basic['body'].iloc[0])
+
+    try:
         row_basic['extracted_keywords'] = [extracted_keywords] if extracted_keywords is not None else None
         
         # Send processed data to Kafka
@@ -63,14 +67,19 @@ def process_and_send(row):
         # publish the data to the Quix stream created earlier
         stream_producer.timeseries.publish(row_basic)
         print(f"Published: {row_basic}")
+
     except Exception as e:
-        print(f"Process row failed because: {e}")
+        print(f"Publish row failed because: {e}")
 
 # Read the JSONL file and process each line
 with open('r_dataengineering_comments.jsonl', 'r', encoding='utf-8') as file:
     for line in file:
-        json_data = json.loads(line)
-        df_row = pd.DataFrame([json_data])
+        try:
+            json_data = json.loads(line)
+            df_row = pd.DataFrame([json_data])
+        except Exception as e:
+            print(f"Jsonl load line failed because: {e}")
+            
         process_and_send(df_row)
 
 # Run this method before shutting down.
