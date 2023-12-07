@@ -4,7 +4,7 @@ variables:
   - name: output
     inputType: OutputTopic
     description: This is the output topic for hello world data
-    defaultValue: extracted-keywords-v2
+    defaultValue: extracted-keywords-v3
     required: true
 dockerfile: build/dockerfile
 runEntryPoint: main.py
