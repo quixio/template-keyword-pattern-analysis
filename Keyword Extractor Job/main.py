@@ -1,34 +1,56 @@
-import quixstreams as qx
-import time
-import datetime
-import math
+import json
+from keybert import KeyBERT
+from keyphrase_vectorizers import KeyphraseCountVectorizer
+import ray
+import modin.pandas as pd
+from kafka import KafkaProducer
 import os
 
+# Initialize Ray
+ray.init()
 
-# Quix injects credentials automatically to the client. 
-# Alternatively, you can always pass an SDK token manually as an argument.
+# Initialize KeyBERT model
+kw_model = KeyBERT()
+
+# Initialize Kafka producer
 client = qx.QuixStreamingClient()
 
 # Open the output topic where to write data out
 topic_producer = client.get_topic_producer(topic_id_or_name = os.environ["output"])
 
 # Set stream ID or leave parameters empty to get stream ID generated.
-stream = topic_producer.create_stream()
+stream = topic_producer.get_or_create_stream()
 stream.properties.name = "Hello World Python stream"
 
-# Add metadata about time series data you are about to send. 
-stream.timeseries.add_definition("ParameterA").set_range(-1.2, 1.2)
-stream.timeseries.buffer.time_span_in_milliseconds = 100
+def extract_keywords_with_error_handling(doc):
+    try:
+        return kw_model.extract_keywords(doc, vectorizer=KeyphraseCountVectorizer(pos_pattern='<N.*>+'))
+    except Exception as e:
+        print(f"Error because: {e}")
+        return None
 
-print("Sending values for 30 seconds.")
+# Function to process and send each row to Kafka
+def process_and_send(row):
+    # Process the row
+    row_basic = row[['created_utc', 'parent_id', 'author', 'body']].copy()
+    row_basic['human_readable_time'] = pd.to_datetime(row_basic['created_utc'], unit='s')
+    row_basic['word_count'] = row_basic['body'].str.split().apply(len)
+    row_basic['extracted_keywords'] = extract_keywords_with_error_handling(row_basic['body'])
+    
+    # Convert row to dictionary and add process ID
+    processed_data = row_basic.to_dict('records')[0]
+    processed_data['process_id'] = os.getpid()
+    
+    # Send processed data to Kafka
+    producer.send('your_topic_name', processed_data)
 
-for index in range(0, 3000):
-    stream.timeseries \
-        .buffer \
-        .add_timestamp(datetime.datetime.utcnow()) \
-        .add_value("ParameterA", math.sin(index / 200.0) + math.sin(index) / 5.0) \
-        .publish()
-    time.sleep(0.01)
+# Read the JSONL file and process each line
+with open('r_dataengineering_comments.jsonl', 'r', encoding='utf-8') as file:
+    for line in file:
+        json_data = json.loads(line)
+        df_row = pd.DataFrame([json_data])
+        process_and_send(df_row)
 
-print("Closing stream")
-stream.close()
+# Ensure all messages are sent before closing the producer
+producer.flush()
+producer.close()
