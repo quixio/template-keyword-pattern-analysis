@@ -3,3 +3,4 @@ quixstreams==0.5.7
 # keybert==0.8.3
 # keyphrase-vectorizers==0.0.11
 requests
+gdown
