@@ -17,7 +17,8 @@ response.raise_for_status()  # Ensure the download was successful
 # Save the file to storage
 with open(zip_file_path, 'wb') as file:
     file.write(response.content)
+    print("wrote the file")
 
 # Unzip the file
-with zipfile.ZipFile(zip_file_path, 'r') as zip_ref:
-    zip_ref.extractall(extract_path)
+#with zipfile.ZipFile(zip_file_path, 'r') as zip_ref:
+#    zip_ref.extractall(extract_path)
