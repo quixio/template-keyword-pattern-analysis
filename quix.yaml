@@ -20,6 +20,20 @@ deployments:
         description: This is the output topic for hello world data
         required: true
         value: extracted-keywords-v2
+  - name: Keyword Extractor Job V7
+    application: Keyword Extractor Job
+    deploymentType: Job
+    version: 085263fff6503a79aae1e6e9f922fe318bc3faab
+    resources:
+      cpu: 4000
+      memory: 2000
+      replicas: 1
+    variables:
+      - name: output
+        inputType: OutputTopic
+        description: This is the output topic for hello world data
+        required: true
+        value: extracted-keywords-v3
 
 # This section describes the Topics of the data pipeline
 topics:
