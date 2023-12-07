@@ -1,7 +1,7 @@
 import json
 from keybert import KeyBERT
 from keyphrase_vectorizers import KeyphraseCountVectorizer
-import ray
+# import ray
 import pandas as pd
 import os
 import quixstreams as qx
@@ -9,7 +9,7 @@ import gdown
 import zipfile
 
 # Initialize Ray
-ray.init()
+# ray.init()
 
 # Initialize KeyBERT model
 kw_model = KeyBERT()
