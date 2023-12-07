@@ -54,7 +54,7 @@ def process_and_send(row):
     # Send processed data to Kafka
     # Set stream ID or leave parameters empty to get stream ID generated.
     stream_producer = topic_producer.get_or_create_stream(row_basic['parent_id'].iloc[0])
-    stream_producer.properties.name = "Keyword Extraction"
+    stream_producer.properties.name = row_basic['parent_id'].iloc[0]
 
     # Convert Modin DataFrame to pandas DataFrame before publishing
     row_basic_pandas = row_basic._to_pandas()
