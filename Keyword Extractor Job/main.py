@@ -2,7 +2,7 @@ import requests
 import zipfile
 
 # Direct download link for the Google Drive file
-direct_link = 'https://drive.google.com/uc?id=1eIdeNAOe40JN3Ogz7okoGuW_h7ToYjyj&export=download'
+direct_link = 'https://drive.google.com/file/d/1eIdeNAOe40JN3Ogz7okoGuW_h7ToYjyj/view?usp=sharing'
 
 # Path to save the downloaded zip file
 zip_file_path = 'r_dataengineering.zip'
