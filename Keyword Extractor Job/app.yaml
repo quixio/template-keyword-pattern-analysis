@@ -7,5 +7,5 @@ variables:
     defaultValue: hello-world-source
     required: true
 dockerfile: build/dockerfile
-runEntryPoint: main_other.py
-defaultFile: main_other.py
+runEntryPoint: backup.py
+defaultFile: backup.py
