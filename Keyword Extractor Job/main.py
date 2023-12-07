@@ -52,10 +52,8 @@ def process_and_send(row):
 
         # Extract keywords and wrap the list in another list to treat it as a single element
         extracted_keywords = extract_keywords_with_error_handling(row_basic['body'].iloc[0])
-
-    try:
         row_basic['extracted_keywords'] = [extracted_keywords] if extracted_keywords is not None else None
-        
+    try:
         # Send processed data to Kafka
         # Set stream ID or leave parameters empty to get stream ID generated.
         stream_producer = topic_producer.get_or_create_stream(row_basic['parent_id'].iloc[0])
