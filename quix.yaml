@@ -6,20 +6,6 @@ metadata:
 
 # This section describes the Deployments of the data pipeline
 deployments:
-  - name: Keyword Extractor Job V6
-    application: Keyword Extractor Job
-    deploymentType: Job
-    version: f2feacd86afbf44afd5ed70c7fa157ba2b3f8d75
-    resources:
-      cpu: 4000
-      memory: 1000
-      replicas: 1
-    variables:
-      - name: output
-        inputType: OutputTopic
-        description: This is the output topic for hello world data
-        required: true
-        value: extracted-keywords-v2
   - name: Keyword Extractor Job V7
     application: Keyword Extractor Job
     deploymentType: Job
