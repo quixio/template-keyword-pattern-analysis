@@ -36,5 +36,5 @@ destination = 'r_dataengineering.zip'
 download_file_from_google_drive(file_id, destination)
 
 # Unzip the file
-with zipfile.ZipFile(destination, 'r') as zip_ref:
-    zip_ref.extractall('.')
+#with zipfile.ZipFile(destination, 'r') as zip_ref:
+#    zip_ref.extractall('.')
