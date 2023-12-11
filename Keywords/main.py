@@ -53,7 +53,7 @@ def publish(keyword_data, row):
 sdf = sdf.apply(reply)
 
 sdf["Timestamp"] = sdf["Timestamp"].apply(lambda row: time.time_ns())
-sdf["total"] = sdf.apply(lambda r: 10)
+#sdf["total"] = sdf.apply(lambda r: 10)
 sdf = sdf.to_topic(output_topic)
 
 
