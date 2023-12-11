@@ -10,7 +10,6 @@ input_topic = app.topic(os.environ["input"], value_deserializer=QuixDeserializer
 output_topic = app.topic(os.environ["output"], value_serializer=QuixTimeseriesSerializer())
 
 sdf = app.dataframe(input_topic)
-output_sdf = app.dataframe(output_topic)
 
 # Initialize an empty dictionary to store the counts and total scores
 keyword_data = {}
@@ -55,8 +54,7 @@ sdf = sdf.apply(reply)
 
 #sdf["Timestamp"] = sdf["Timestamp"].apply(lambda row: time.time_ns())
 
-#sdf = sdf.to_topic(output_topic)
+sdf = sdf.to_topic(output_topic)
 
 if __name__ == "__main__":
     app.run(sdf)
-    app.run(output_sdf)
