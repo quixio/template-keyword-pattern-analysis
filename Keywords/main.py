@@ -20,11 +20,11 @@ def reply(row: dict):
         return
 
     data = row['extracted_keywords']
-    print(data)
+    #print(data)
 
     # Check if data is a list of tuples
     if not isinstance(data, list) or not all(isinstance(item, tuple) and len(item) == 2 for item in data):
-        print(f"Warning: 'extracted_keywords' field is not a list of tuples: {data}")
+        #print(f"Warning: 'extracted_keywords' field is not a list of tuples: {data}")
         return
 
     # Process the data
