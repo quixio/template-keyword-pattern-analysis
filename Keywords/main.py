@@ -56,5 +56,8 @@ sdf = sdf.apply(reply)
 output_sdf["Timestamp"] = sdf["Timestamp"].apply(lambda row: time.time_ns())
 output_sdf = output_sdf.to_topic(output_topic)
 
+output_sdf = output_sdf.apply(lambda row: print(row))
+
+
 if __name__ == "__main__":
     app.run(sdf)
