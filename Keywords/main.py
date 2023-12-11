@@ -13,8 +13,19 @@ sdf = app.dataframe(input_topic)
 keyword_data = {}
 
 def reply(row: dict):
+
+    # Check if the row has an 'extracted_keywords' field
+    if 'extracted_keywords' not in row:
+        print(f"Warning: row does not have an 'extracted_keywords' field: {row}")
+        return
+
     data = row['extracted_keywords']
     print(data)
+
+    # Check if data is a list of tuples
+    if not isinstance(data, list) or not all(isinstance(item, tuple) and len(item) == 2 for item in data):
+        print(f"Warning: 'extracted_keywords' field is not a list of tuples: {data}")
+        return
 
     # Process the data
     for keyword, score in data:
@@ -27,8 +38,8 @@ def reply(row: dict):
             keyword_data[keyword]['total_score'] += score
 
     # Print the results
-    for keyword, data in keyword_data.items():
-        print(f"Keyword: {keyword}, Count: {data['count']}, Total Score: {data['total_score']}")
+    #for keyword, data in keyword_data.items():
+    #    print(f"Keyword: {keyword}, Count: {data['count']}, Total Score: {data['total_score']}")
 
 sdf = sdf.apply(reply)
 
