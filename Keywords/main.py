@@ -10,7 +10,7 @@ output_topic = app.topic(os.environ["output"], value_serializer=QuixTimeseriesSe
 sdf = app.dataframe(input_topic)
 
 def reply(row: dict):
-    print(row)
+    print(row['extracted_keywords'])
 
 sdf = sdf.apply(reply)
 
