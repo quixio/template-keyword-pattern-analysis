@@ -50,6 +50,7 @@ def publish(keyword_data):
     for keyword, data in keyword_data.items():
         print(f"Keyword: {keyword}, Count: {data['count']}, Total Score: {data['total_score']}")
         output_sdf["blah"] = 100
+        print(output_sdf["blah"])
 
 sdf = sdf.apply(reply)
 
