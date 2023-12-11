@@ -18,6 +18,10 @@ def reply(row: dict):
     global keyword_data
 
     # Convert the 'extracted_keywords' field from a string to a list of tuples
+    if 'extracted_keywords' not in row or row['extracted_keywords'] is None:
+        print(f"Warning: row does not have an 'extracted_keywords' field or it's None: {row}")
+        return
+
     data = ast.literal_eval(row['extracted_keywords'])
 
     print("---")
