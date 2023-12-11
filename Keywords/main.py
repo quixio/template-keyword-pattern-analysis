@@ -46,18 +46,15 @@ def reply(row: dict):
 
 def publish(keyword_data, row):
     # Print the results
-    print("---")
     for keyword, data in keyword_data.items():
         print(f"Keyword: {keyword}, Count: {data['count']}, Total Score: {data['total_score']}")
-        row["blah"] = 100
         
 
 sdf = sdf.apply(reply)
 
 sdf["Timestamp"] = sdf["Timestamp"].apply(lambda row: time.time_ns())
+sdf["total"] = 10
 sdf = sdf.to_topic(output_topic)
-
-sdf = sdf.apply(lambda row: print(row))
 
 
 if __name__ == "__main__":
