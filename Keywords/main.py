@@ -14,7 +14,7 @@ keyword_data = {}
 
 def reply(row: dict):
     global keyword_data
-    
+    print(row)
     # Check if the row has an 'extracted_keywords' field
     if 'extracted_keywords' not in row:
         print(f"Warning: row does not have an 'extracted_keywords' field: {row}")
