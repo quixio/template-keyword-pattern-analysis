@@ -42,9 +42,9 @@ def reply(row: dict):
             keyword_data[keyword]['count'] += 1
             keyword_data[keyword]['total_score'] += score
 
-    publish(keyword_data, row)
+    publish(keyword_data)
 
-def publish(keyword_data, row):
+def publish(keyword_data):
     # Print the results
     for keyword, data in keyword_data.items():
         print(f"Keyword: {keyword}, Count: {data['count']}, Total Score: {data['total_score']}")
