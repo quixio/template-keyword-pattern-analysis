@@ -42,9 +42,9 @@ def reply(row: dict):
             keyword_data[keyword]['count'] += 1
             keyword_data[keyword]['total_score'] += score
 
-    printer(keyword_data)
+    publish(keyword_data)
 
-def printer(keyword_data):
+def publish(keyword_data):
     # Print the results
     print("---")
     for keyword, data in keyword_data.items():
@@ -59,3 +59,4 @@ sdf = sdf.apply(reply)
 
 if __name__ == "__main__":
     app.run(sdf)
+    app.run(output_sdf)
