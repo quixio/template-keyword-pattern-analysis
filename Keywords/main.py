@@ -38,8 +38,8 @@ def reply(row: dict):
             keyword_data[keyword]['total_score'] += score
 
     # Print the results
-    #for keyword, data in keyword_data.items():
-    #    print(f"Keyword: {keyword}, Count: {data['count']}, Total Score: {data['total_score']}")
+    for keyword, data in keyword_data.items():
+        print(f"Keyword: {keyword}, Count: {data['count']}, Total Score: {data['total_score']}")
 
 sdf = sdf.apply(reply)
 
