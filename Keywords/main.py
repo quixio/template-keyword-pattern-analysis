@@ -9,8 +9,26 @@ output_topic = app.topic(os.environ["output"], value_serializer=QuixTimeseriesSe
 
 sdf = app.dataframe(input_topic)
 
+# Initialize an empty dictionary to store the counts and total scores
+keyword_data = {}
+
 def reply(row: dict):
-    print(row['extracted_keywords'])
+    data = row['extracted_keywords']
+    print(data)
+
+    # Process the data
+    for keyword, score in data:
+        if keyword not in keyword_data:
+            # If the keyword is not in the dictionary, add it with the current count and score
+            keyword_data[keyword] = {'count': 1, 'total_score': score}
+        else:
+            # If the keyword is already in the dictionary, increment the count and add to the total score
+            keyword_data[keyword]['count'] += 1
+            keyword_data[keyword]['total_score'] += score
+
+    # Print the results
+    for keyword, data in keyword_data.items():
+        print(f"Keyword: {keyword}, Count: {data['count']}, Total Score: {data['total_score']}")
 
 sdf = sdf.apply(reply)
 
