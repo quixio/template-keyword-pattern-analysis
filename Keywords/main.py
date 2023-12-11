@@ -10,7 +10,7 @@ input_topic = app.topic(os.environ["input"], value_deserializer=QuixDeserializer
 output_topic = app.topic(os.environ["output"], value_serializer=QuixTimeseriesSerializer())
 
 sdf = app.dataframe(input_topic)
-output_sdf = app.dataframe(output_topic)
+#output_sdf = app.dataframe(output_topic)
 
 # Initialize an empty dictionary to store the counts and total scores
 keyword_data = {}
@@ -49,17 +49,16 @@ def publish(keyword_data):
     print("---")
     for keyword, data in keyword_data.items():
         print(f"Keyword: {keyword}, Count: {data['count']}, Total Score: {data['total_score']}")
-        output_sdf["blah"] = 100
+        sdf["blah"] = 100
         
 
 sdf = sdf.apply(reply)
 
-output_sdf["Timestamp"] = sdf["Timestamp"].apply(lambda row: time.time_ns())
-output_sdf = output_sdf.to_topic(output_topic)
+sdf["Timestamp"] = sdf["Timestamp"].apply(lambda row: time.time_ns())
+sdf = sdf.to_topic(output_topic)
 
-output_sdf = output_sdf.apply(lambda row: print(row))
+sdf = sdf.apply(lambda row: print(row))
 
 
 if __name__ == "__main__":
     app.run(sdf)
-    app.run(output_sdf)
