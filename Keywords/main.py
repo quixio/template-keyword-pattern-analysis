@@ -10,6 +10,7 @@ input_topic = app.topic(os.environ["input"], value_deserializer=QuixDeserializer
 output_topic = app.topic(os.environ["output"], value_serializer=QuixTimeseriesSerializer())
 
 sdf = app.dataframe(input_topic)
+output_sdf = app.dataframe(output_topic)
 
 # Initialize an empty dictionary to store the counts and total scores
 keyword_data = {}
@@ -48,6 +49,7 @@ def printer(keyword_data):
     print("---")
     for keyword, data in keyword_data.items():
         print(f"Keyword: {keyword}, Count: {data['count']}, Total Score: {data['total_score']}")
+        output_sdf["blah"] = 100
 
 sdf = sdf.apply(reply)
 
