@@ -9,14 +9,14 @@ output_topic = app.topic(os.environ["output"], value_serializer=QuixTimeseriesSe
 
 sdf = app.dataframe(input_topic)
 
-def reply(row: dict, state: State):
+def reply(row: dict):
     print(row)
 
-sdf = sdf.apply(reply, stateful=True)
+sdf = sdf.apply(reply)
 
-sdf["Timestamp"] = sdf["Timestamp"].apply(lambda row: time.time_ns())
+#sdf["Timestamp"] = sdf["Timestamp"].apply(lambda row: time.time_ns())
 
-sdf = sdf.to_topic(output_topic)
+#sdf = sdf.to_topic(output_topic)
 
 if __name__ == "__main__":
     app.run(sdf)
