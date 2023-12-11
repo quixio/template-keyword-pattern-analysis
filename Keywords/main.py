@@ -32,9 +32,12 @@ def reply(row: dict):
     for keyword, score in data:
         if keyword not in keyword_data:
             # If the keyword is not in the dictionary, add it with the current count and score
+            print(f"Adding kw {keyword}")
             keyword_data[keyword] = {'count': 1, 'total_score': score}
         else:
             # If the keyword is already in the dictionary, increment the count and add to the total score
+            print(f"incrementing kw {keyword}")
+
             keyword_data[keyword]['count'] += 1
             keyword_data[keyword]['total_score'] += score
 
