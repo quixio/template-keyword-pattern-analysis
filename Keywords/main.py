@@ -42,14 +42,14 @@ def reply(row: dict):
             keyword_data[keyword]['count'] += 1
             keyword_data[keyword]['total_score'] += score
 
-    publish(keyword_data)
+    publish(keyword_data, row)
 
-def publish(keyword_data):
+def publish(keyword_data, row):
     # Print the results
     print("---")
     for keyword, data in keyword_data.items():
         print(f"Keyword: {keyword}, Count: {data['count']}, Total Score: {data['total_score']}")
-        sdf["blah"] = 100
+        row["blah"] = 100
         
 
 sdf = sdf.apply(reply)
