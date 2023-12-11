@@ -41,6 +41,8 @@ def reply(row: dict):
             keyword_data[keyword]['count'] += 1
             keyword_data[keyword]['total_score'] += score
 
+    printer(keyword_data)
+
 def printer(keyword_data):
     # Print the results
     print("---")
