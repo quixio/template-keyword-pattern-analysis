@@ -18,9 +18,6 @@ keyword_data = {}
 def reply(row: dict):
     global keyword_data
 
-    row["abc"] = "hi"
-    return row
-
     # Convert the 'extracted_keywords' field from a string to a list of tuples
     if 'extracted_keywords' not in row or row['extracted_keywords'] is None:
         print(f"Warning: row does not have an 'extracted_keywords' field or it's None: {row}")
@@ -45,13 +42,12 @@ def reply(row: dict):
             keyword_data[keyword]['count'] += 1
             keyword_data[keyword]['total_score'] += score
 
-    publish(keyword_data)
-
-def publish(keyword_data):
     # Print the results
     for keyword, data in keyword_data.items():
         print(f"Keyword: {keyword}, Count: {data['count']}, Total Score: {data['total_score']}")
-        
+        row["abc"] = "hi"
+    
+    return row        
 
 sdf = sdf.apply(reply)
 sdf = sdf[sdf.apply(lambda row: row is not None)]
