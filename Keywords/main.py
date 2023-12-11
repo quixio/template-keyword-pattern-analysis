@@ -18,6 +18,9 @@ keyword_data = {}
 def reply(row: dict):
     global keyword_data
 
+    row["abc"] = "hi"
+    return row
+
     # Convert the 'extracted_keywords' field from a string to a list of tuples
     if 'extracted_keywords' not in row or row['extracted_keywords'] is None:
         print(f"Warning: row does not have an 'extracted_keywords' field or it's None: {row}")
@@ -51,10 +54,10 @@ def publish(keyword_data):
         
 
 sdf = sdf.apply(reply)
-
-#sdf["Timestamp"] = sdf["Timestamp"].apply(lambda row: time.time_ns())
-#sdf["total"] = sdf.update(lambda r: 10)
-#sdf = sdf.to_topic(output_topic)
+sdf = sdf[sdf.apply(lambda row: row is not None)]
+sdf["Timestamp"] = sdf["Timestamp"].apply(lambda row: time.time_ns())
+# sdf["total"] = sdf.update(lambda r: 10)
+sdf = sdf.to_topic(output_topic)
 
 
 if __name__ == "__main__":
