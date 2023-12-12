@@ -1,3 +1,14 @@
+# this code recieves data with a column called 'extracted_keywords'
+#
+# "extracted_keywords": [
+#     "[('data engineer', 0.6018), ('software engineering skills', 0.5121), ('software engineer', 0.4633), ('software engineering principles', 0.2394), ('someone', 0.1321)]"
+# ]
+#
+# The output is the sum of the values for the extracted_keywords
+#
+
+
+
 from quixstreams import Application, State
 from quixstreams.models.serializers.quix import QuixDeserializer, QuixTimeseriesSerializer, JSONSerializer
 import os
@@ -109,7 +120,7 @@ def old_way():
     return sdf
 
 
-
+# uncomment the one you want to use..
 #sdf = sdf_way()
 sdf = old_way()
 
