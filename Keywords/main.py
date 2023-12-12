@@ -26,7 +26,8 @@ def func(d: dict):
     sdf.to_topic(output_topic)
 #)
 
-app.run(sdf)
+if __name__ == "__main__":
+    app.run(sdf)
 
 # def reply(row: dict):
 #     global keyword_data
