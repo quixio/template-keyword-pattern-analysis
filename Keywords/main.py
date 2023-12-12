@@ -29,7 +29,10 @@ def process_rows(row: dict, state: State):
         return
 
 
-    print(row)
+    print("---------------")
+    print("extracted_row" in row)
+    print("---------------")
+
     new_rows = dict(ast.literal_eval(row['extracted_keywords']))
     new_rows['Timestamp'] = row['Timestamp']
 
