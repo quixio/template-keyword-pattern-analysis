@@ -19,6 +19,8 @@ def process_rows(row: dict, state: State):
 
     new_rows = dict(ast.literal_eval(row['extracted_keywords']))
     new_rows['Timestamp'] = row['Timestamp']
+
+    # remove columns 
     if 'parent_id' in new_rows:
         del new_rows['parent_id']
     if 'author' in new_rows:
@@ -28,6 +30,7 @@ def process_rows(row: dict, state: State):
     if 'human_timestamp' in new_rows:
         del new_rows['human_timestamp']
 
+    
     sums_state = state.get("sums", {})
     for key in new_rows:
         if key not in sums_state:
@@ -45,7 +48,8 @@ def process_rows(row: dict, state: State):
 # expand keywords from a nested dict to rows (keeping the timestamp)
 def expand_keywords(row: dict):
     new_rows = row['extracted_keywords']
-    #print(new_rows)
+
+    # we need the timestamp, otherwise we could use sdf's expand function
     new_rows['Timestamp'] = row['Timestamp']
 
     return new_rows
