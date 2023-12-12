@@ -74,6 +74,12 @@ def process_rows(row: dict, state: State):
     print("4")
     print("---------------")
     
+    print("---------------")
+    print("---------------")
+    print(sums_state)
+    print("---------------")
+    print("---------------")
+
     # update state with the new state
     state.set('sums', sums_state)
     print("---------------")
