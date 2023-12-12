@@ -68,7 +68,7 @@ def reply(row: dict):
 #     print(row)
 
 sdf = sdf.update(lambda row: print(row))
-sdf = sdf.apply(lambda value: value, expand=True)
+sdf = sdf.apply(lambda value: value['extracted_keywords'], expand=True)
 sdf = sdf.update(lambda row: print(row))
 
 
