@@ -35,7 +35,11 @@ def process_rows(row: dict, state: State):
 
     new_rows = dict(ast.literal_eval(row['extracted_keywords']))
     new_rows['Timestamp'] = row['Timestamp']
-
+    
+    print("---------------")
+    print("1")
+    print("---------------")
+    
     # remove columns 
     if 'parent_id' in new_rows:
         del new_rows['parent_id']
@@ -45,10 +49,18 @@ def process_rows(row: dict, state: State):
         del new_rows['body']
     if 'human_timestamp' in new_rows:
         del new_rows['human_timestamp']
-
+    
+    print("---------------")
+    print("2")
+    print("---------------")
+    
     # get sums from state, init with empty {} if not there
     sums_state = state.get("sums", {})
-
+    
+    print("---------------")
+    print("3")
+    print("---------------")
+    
     # get/add to/from state and sum the values
     for key in new_rows:
         if key not in sums_state:
