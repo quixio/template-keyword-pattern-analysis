@@ -77,7 +77,7 @@ def process_rows(row: dict, state: State):
     
     print("---------------")
     print("---------------")
-    print(sums_state)
+    # print(sums_state)
     print("---------------")
     print("---------------")
 
