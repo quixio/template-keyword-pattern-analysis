@@ -40,12 +40,9 @@ def process_rows(row: dict, state: State):
     state.set('sums', sums_state)
 
     return new_rows
-       
-
-# def reply(row: dict):
-#     print(row)
 
 
+# expand keywords from a nested dict to rows (keeping the timestamp)
 def expand_keywords(row: dict):
     new_rows = row['extracted_keywords']
     #print(new_rows)
@@ -68,19 +65,37 @@ def sum_keywords(row: dict, state: State):
 
 def sdf_way():
     sdf = app.dataframe(input_topic)
+
+    # filter data
     sdf = sdf[sdf.contains('extracted_keywords')]
     sdf = sdf[sdf['extracted_keywords'].notnull()]
+
+    # parse extracted keyword column (change string to dict)
     sdf['extracted_keywords'] = sdf['extracted_keywords'].apply(lambda value: dict(ast.literal_eval(value)))
+
+    # expand keywords from a nested dict to rows (keeping the timestamp)
     sdf = sdf.apply(expand_keywords)
+
+    # sum keywords and save to state
     sdf = sdf.update(sum_keywords, stateful=True)
+
+    # print
     sdf = sdf.update(lambda row: print(row))
+
+    # publish to output topic
     sdf = sdf.to_topic(output_topic)
     return sdf
 
 def old_way():
     sdf = app.dataframe(input_topic)
+
+    # do all the processing in process_rows
     sdf = sdf.apply(process_rows, stateful=True)
+
+    # print
     sdf = sdf.update(lambda row: print(row))
+
+    # publish to output topic
     sdf = sdf.to_topic(output_topic)
     return sdf
 
