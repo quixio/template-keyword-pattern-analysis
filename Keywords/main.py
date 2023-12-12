@@ -19,11 +19,11 @@ def func(d: dict):
     print(d)
 
 #sdf = (
-    app.dataframe(input_topic)
-    # using a dummy function here assuming the incoming value is already a list
-    sdf.apply(lambda value: func)
-    # each item from the list will be produced to the output topic as a separate message
-    sdf.to_topic(output_topic)
+app.dataframe(input_topic)
+# using a dummy function here assuming the incoming value is already a list
+sdf.apply(lambda value: func)
+# each item from the list will be produced to the output topic as a separate message
+sdf.to_topic(output_topic)
 #)
 
 if __name__ == "__main__":
