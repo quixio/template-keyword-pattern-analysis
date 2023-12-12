@@ -38,6 +38,7 @@ def process_rows(row: dict, state: State):
     
     print("---------------")
     print("1")
+    print(new_rows)
     print("---------------")
     
     # remove columns 
