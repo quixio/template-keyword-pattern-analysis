@@ -67,13 +67,10 @@ def reply(row: dict):
 # def reply(row: dict):
 #     print(row)
 
-print("---")
 sdf = sdf.update(lambda row: print(row))
-print("---")
 sdf = sdf.apply(lambda value: value, expand=True)
-print("+++")
 sdf = sdf.update(lambda row: print(row))
-print("+++")
+
 
 
 #sdf = sdf.apply(reply, expand=True)
