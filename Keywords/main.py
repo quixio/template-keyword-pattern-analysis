@@ -28,6 +28,8 @@ def process_rows(row: dict, state: State):
         print(f"Warning: row does not have an 'extracted_keywords' field or it's None: {row}")
         return
 
+
+    print(row)
     new_rows = dict(ast.literal_eval(row['extracted_keywords']))
     new_rows['Timestamp'] = row['Timestamp']
 
