@@ -70,9 +70,16 @@ def process_rows(row: dict, state: State):
 
         new_rows[key] = sums_state[key]
     
+    print("---------------")
+    print("4")
+    print("---------------")
+    
     # update state with the new state
     state.set('sums', sums_state)
-
+    print("---------------")
+    print("5")
+    print("---------------")
+    
     # return the new rows, which will update the sdf 
     # (this function was called with apply)
     return new_rows
