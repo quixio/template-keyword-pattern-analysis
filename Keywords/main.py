@@ -89,6 +89,7 @@ def sdf_way():
 
 def old_way():
     sdf = app.dataframe(input_topic)
+    sdf = sdf[['Timestamp', 'extracted_keywords']]
     sdf = sdf.update(process_rows, stateful=True)
     sdf = sdf.update(lambda row: print(row))
     sdf = sdf.to_topic(output_topic)
