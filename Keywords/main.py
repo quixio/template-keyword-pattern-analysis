@@ -126,7 +126,7 @@ def sdf_way():
     sdf = sdf.update(lambda row: print(sdf.contains('extracted_keywords')))
 
     sdf['extracted_keywords'] = sdf['extracted_keywords'].apply(lambda value: dict(ast.literal_eval(value)))
-    sdf = sdf.update(lambda row: print(row))
+    # sdf = sdf.update(lambda row: print(row))
 
     # expand keywords from a nested dict to rows (keeping the timestamp)
     sdf = sdf.apply(expand_keywords)
