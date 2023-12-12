@@ -39,10 +39,14 @@ def process_rows(row: dict, state: State):
 
     new_rows = dict(ast.literal_eval(row['extracted_keywords']))
     new_rows['Timestamp'] = row['Timestamp']
-    del new_rows['parent_id']
-    del new_rows['author']
-    del new_rows['body']
-    del new_rows['human_timestamp']
+    if 'parent_id' in new_rows:
+        del new_rows['parent_id']
+    if 'author' in new_rows:
+        del new_rows['author']
+    if 'body' in new_rows:
+        del new_rows['body']
+    if 'human_timestamp' in new_rows:
+        del new_rows['human_timestamp']
 
     sums_state = state.get("sums", {})
     for key in new_rows:
