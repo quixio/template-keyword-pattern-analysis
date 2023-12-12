@@ -70,7 +70,7 @@ def reply(row: dict):
 
 def expand_row(row: dict):
     new_rows = row['extracted_keywords']
-    
+    print(new_rows)
     for expanded_row in new_rows:
         expanded_row['Timestamp'] = row['Timestamp']
 
