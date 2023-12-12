@@ -91,7 +91,7 @@ def sumthing(row: dict, state: State):
 sdf = sdf[sdf.contains('extracted_keywords')]
 sdf = sdf[sdf['extracted_keywords'].notnull()]
 sdf['extracted_keywords'] = sdf['extracted_keywords'].apply(lambda value: dict(ast.literal_eval(value)))
-sdf = sdf.update(lambda row: print(row))
+#sdf = sdf.update(lambda row: print(row))
 #sdf = sdf.apply(lambda value: value['extracted_keywords'], expand=True)
 sdf = sdf.apply(expand_row)
 sdf = sdf.update(sumthing, stateful=True)
