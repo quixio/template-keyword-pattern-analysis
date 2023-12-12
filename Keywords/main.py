@@ -63,10 +63,10 @@ def reply(row: dict):
     
     return row        
 
-def reply(row: dict):
-    print(row)
+# def reply(row: dict):
+#     print(row)
 
-#sdf = sdf.apply(reply, expand=True)
+sdf = sdf.apply(reply, expand=True)
 #sdf = sdf[sdf.apply(lambda row: row is not None)]
 #sdf["Timestamp"] = sdf["Timestamp"].apply(lambda row: time.time_ns())
 # sdf["total"] = sdf.update(lambda r: 10)
