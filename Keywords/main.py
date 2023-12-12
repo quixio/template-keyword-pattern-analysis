@@ -84,7 +84,7 @@ def sumthing(row: dict, state: State):
         else:
             sums_state[key] += row[key]
 
-        row['sum_' + key] = sums_state[key]
+        row[key] = sums_state[key]
     
     state.set('sums', sums_state)
 
