@@ -21,7 +21,7 @@ def func(d: dict):
 #sdf = (
 app.dataframe(input_topic)
 # using a dummy function here assuming the incoming value is already a list
-sdf.apply(lambda value: func)
+sdf.apply(lambda value: func, expand=True)
 # each item from the list will be produced to the output topic as a separate message
 sdf.to_topic(output_topic)
 #)
