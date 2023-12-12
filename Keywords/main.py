@@ -15,10 +15,13 @@ sdf = app.dataframe(input_topic)
 # Initialize an empty dictionary to store the counts and total scores
 keyword_data = {}
 
+def func(d):
+    print(d)
+
 sdf = (
     app.dataframe(input_topic)
     # using a dummy function here assuming the incoming value is already a list
-    .apply(lambda value: value, expand=True)
+    .apply(lambda value: func, expand=True)
     # each item from the list will be produced to the output topic as a separate message
     .to_topic(output_topic)
 )
