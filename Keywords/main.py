@@ -106,7 +106,7 @@ sdf = sdf.update(lambda row: print(row))
 #sdf = sdf[sdf.apply(lambda row: row is not None)]
 #sdf["Timestamp"] = sdf["Timestamp"].apply(lambda row: time.time_ns())
 # sdf["total"] = sdf.update(lambda r: 10)
-#sdf = sdf.to_topic(output_topic)
+sdf = sdf.to_topic(output_topic)
 
 
 if __name__ == "__main__":
