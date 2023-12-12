@@ -30,7 +30,7 @@ def process_rows(row: dict, state: State):
 
 
     print("---------------")
-    print("extracted_row" in row)
+    print("extracted_keywords" in row)
     print("---------------")
 
     new_rows = dict(ast.literal_eval(row['extracted_keywords']))
