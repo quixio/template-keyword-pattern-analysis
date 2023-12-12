@@ -30,8 +30,10 @@ def process_rows(row: dict, state: State):
     if 'human_timestamp' in new_rows:
         del new_rows['human_timestamp']
 
-    
+    # get sums from state, init with empty {} if not there
     sums_state = state.get("sums", {})
+
+    # get/add to/from state and sum the values
     for key in new_rows:
         if key not in sums_state:
             sums_state[key] = new_rows[key]
@@ -40,8 +42,11 @@ def process_rows(row: dict, state: State):
 
         new_rows[key] = sums_state[key]
     
+    # update state with the new state
     state.set('sums', sums_state)
 
+    # return the new rows, which will update the sdf 
+    # (this function was called with apply)
     return new_rows
 
 
