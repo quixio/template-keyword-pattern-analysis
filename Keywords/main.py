@@ -71,8 +71,7 @@ def reply(row: dict):
 def expand_row(row: dict):
     new_rows = row['extracted_keywords']
     print(new_rows)
-    for expanded_row in new_rows:
-        expanded_row['Timestamp'] = row['Timestamp']
+    new_rows['Timestamp'] = row['Timestamp']
 
     return new_rows
 
@@ -90,7 +89,7 @@ sdf = sdf[sdf['extracted_keywords'].notnull()]
 sdf['extracted_keywords'] = sdf['extracted_keywords'].apply(lambda value: dict(ast.literal_eval(value)))
 sdf = sdf.update(lambda row: print(row))
 #sdf = sdf.apply(lambda value: value['extracted_keywords'], expand=True)
-sdf = sdf.apply(expand_row, expand=True)
+sdf = sdf.apply(expand_row)
 sdf = sdf.update(sumthing, stateful=True)
 
 sdf = sdf.update(lambda row: print(row))
