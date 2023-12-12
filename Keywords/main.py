@@ -49,15 +49,15 @@ keyword_data = {}
     
 #     return row        
 
-def reply(row: dict):
-    print(row)
+# def reply(row: dict):
+#     print(row)
 
-sdf = sdf.apply(reply, expand=True)
-#sdf = sdf[sdf.apply(lambda row: row is not None)]
-#sdf["Timestamp"] = sdf["Timestamp"].apply(lambda row: time.time_ns())
-# sdf["total"] = sdf.update(lambda r: 10)
-#sdf = sdf.to_topic(output_topic)
+# sdf = sdf.apply(reply, expand=True)
+# #sdf = sdf[sdf.apply(lambda row: row is not None)]
+# #sdf["Timestamp"] = sdf["Timestamp"].apply(lambda row: time.time_ns())
+# # sdf["total"] = sdf.update(lambda r: 10)
+# #sdf = sdf.to_topic(output_topic)
 
 
-if __name__ == "__main__":
-    app.run(sdf)
+# if __name__ == "__main__":
+#     app.run(sdf)
