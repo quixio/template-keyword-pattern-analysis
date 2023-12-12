@@ -138,7 +138,7 @@ def sdf_way():
     # sdf = sdf.update(lambda row: print(row))
 
     # publish to output topic
-    sdf = sdf.to_topic(output_topic)
+    #sdf = sdf.to_topic(output_topic)
     return sdf
 
 def old_way():
