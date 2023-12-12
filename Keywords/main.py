@@ -53,6 +53,7 @@ def process_rows(row: dict, state: State):
     
     print("---------------")
     print("2")
+    print(new_rows)
     print("---------------")
     
     # get sums from state, init with empty {} if not there
