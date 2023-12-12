@@ -40,7 +40,7 @@ def reply(row: dict):
     data = ast.literal_eval(row['extracted_keywords'])
 
     print("---")
-    print(data)
+    #print(data)
     print("---")
 
     # Process the data
@@ -67,9 +67,13 @@ def reply(row: dict):
 # def reply(row: dict):
 #     print(row)
 
+print("---")
 sdf = sdf.update(lambda row: print(row))
+print("---")
 sdf = sdf.apply(lambda value: value, expand=True)
+print("+++")
 sdf = sdf.update(lambda row: print(row))
+print("+++")
 
 
 #sdf = sdf.apply(reply, expand=True)
