@@ -25,7 +25,7 @@ print('Download and extraction complete.')
 
 # True = keep original timings.
 # False = No delay! Speed through it as fast as possible.
-keep_timing = True
+keep_timing = False
 
 # If the process is terminated on the command line or by the container
 # setting this flag to True will tell the loops to stop and the code
