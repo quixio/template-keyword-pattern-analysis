@@ -21,6 +21,7 @@ with zipfile.ZipFile(zip_file_path, 'r') as zip_ref:
      zip_ref.extractall(extract_path)
 print('Download and extraction complete.')
 
+# file is 'dengkw_output.csv'
 
 # True = keep original timings.
 # False = No delay! Speed through it as fast as possible.
@@ -48,12 +49,6 @@ stream_producer = producer_topic.create_stream()
 # In this case every 100 rows.
 # See docs for more options. Search "using-a-buffer"
 stream_producer.timeseries.buffer.time_span_in_milliseconds = 100
-
-# EDIT STREAM PROPERTIES
-# stream = producer_topic.create_stream("my-own-stream-id")  # To append data into the stream later, assign a stream id manually.
-stream_producer.properties.name = "Demo Data"  # Give the stream a human readable name (for the data catalogue).
-stream_producer.properties.location = "/demo data"  # Save stream in specific folder to organize your workspace.
-# stream_producer.properties.metadata["version"] = "Version 1"  # Add stream metadata to add context to time series data.
 
 # counters for the status messages
 row_counter = 0
@@ -147,7 +142,7 @@ def process_csv_file(csv_file):
 
 
 # Run the CSV processing in a thread
-processing_thread = threading.Thread(target=process_csv_file, args=('demo-data.csv',))
+processing_thread = threading.Thread(target=process_csv_file, args=('dengkw_output.csv',))
 processing_thread.start()
 
 
