@@ -20,6 +20,21 @@ deployments:
         description: This is the output topic for hello world data
         required: true
         value: extracted-keywords-v3
+  - name: CSV data
+    application: CSV data
+    deploymentType: Service
+    version: 12488a01c30d6f71d506624650614f8e3691abdc
+    resources:
+      cpu: 200
+      memory: 500
+      replicas: 1
+    desiredStatus: Running
+    variables:
+      - name: Topic
+        inputType: OutputTopic
+        description: Name of the output topic to write into
+        required: true
+        value: csv-data
 
 # This section describes the Topics of the data pipeline
 topics:
