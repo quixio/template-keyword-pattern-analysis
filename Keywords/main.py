@@ -148,7 +148,7 @@ def old_way():
     sdf = sdf.apply(process_rows, stateful=True)
 
     # print
-    sdf = sdf.update(lambda row: print(row))
+    #sdf = sdf.update(lambda row: print(row))
 
     # publish to output topic
     #sdf = sdf.to_topic(output_topic)
