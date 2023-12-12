@@ -41,13 +41,13 @@ def process_rows(row: dict, state: State):
     new_rows['Timestamp'] = row['Timestamp']
 
     sums_state = state.get("sums", {})
-    for key in row:
+    for key in new_rows:
         if key not in sums_state:
-            sums_state[key] = row[key]
+            sums_state[key] = new_rows[key]
         else:
-            sums_state[key] += row[key]
+            sums_state[key] += new_rows[key]
 
-        row[key] = sums_state[key]
+        new_rows[key] = sums_state[key]
     
     state.set('sums', sums_state)
        
