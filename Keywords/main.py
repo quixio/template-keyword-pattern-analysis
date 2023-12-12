@@ -123,6 +123,9 @@ def sdf_way():
     sdf = sdf[sdf['extracted_keywords'].notnull()]
 
     # parse extracted keyword column (change string to dict)
+
+    sdf = sdf.update(lambda row: print(list(ast.literal_eval(row))))
+
     sdf['extracted_keywords'] = sdf['extracted_keywords'].apply(lambda value: dict(ast.literal_eval(value)))
     sdf = sdf.update(lambda row: print(row))
 
