@@ -68,12 +68,34 @@ def reply(row: dict):
 #     print(row)
 
 
+def expand_row(row: dict):
+    new_rows = row['extracted_keywords']
+    
+    for expanded_row in new_rows:
+        expanded_row['Timestamp'] = row['Timestamp']
+
+    return new_rows
+
+
+def sumthing(row: dict, state: State):
+    sums_state = state.get("sums", {})
+    for key in row:
+        sums_state[key] += row[key]
+        row['sum_' + key] = sums_state[key]
+    
+    state.set('sums', sums_state)
+
 sdf = sdf[sdf.contains('extracted_keywords')]
 sdf = sdf[sdf['extracted_keywords'].notnull()]
 sdf['extracted_keywords'] = sdf['extracted_keywords'].apply(lambda value: ast.literal_eval(value))
 sdf = sdf.update(lambda row: print(row))
-sdf = sdf.apply(lambda value: value['extracted_keywords'], expand=True)
+#sdf = sdf.apply(lambda value: value['extracted_keywords'], expand=True)
+sdf = sdf.apply(expand_row, expand=True)
+sdf = sdf.update(sumthing, stateful=True)
+
 sdf = sdf.update(lambda row: print(row))
+
+#sdf = sdf[['extracted_keywords']]
 
 
 
