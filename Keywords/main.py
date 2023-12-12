@@ -58,6 +58,8 @@ def process_rows(row: dict, state: State):
         new_rows[key] = sums_state[key]
     
     state.set('sums', sums_state)
+
+    return new_rows
        
 
 # def reply(row: dict):
@@ -97,7 +99,7 @@ def sdf_way():
 
 def old_way():
     sdf = app.dataframe(input_topic)
-    sdf = sdf.update(process_rows, stateful=True)
+    sdf = sdf.apply(process_rows, stateful=True)
     sdf = sdf.update(lambda row: print(row))
     sdf = sdf.to_topic(output_topic)
     return sdf
