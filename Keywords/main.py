@@ -79,7 +79,11 @@ def expand_row(row: dict):
 def sumthing(row: dict, state: State):
     sums_state = state.get("sums", {})
     for key in row:
-        sums_state[key] += row[key]
+        if key not in sums_state:
+            sums_state[key] = row[key]
+        else:
+            sums_state[key] += row[key]
+
         row['sum_' + key] = sums_state[key]
     
     state.set('sums', sums_state)
