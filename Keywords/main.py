@@ -153,8 +153,8 @@ def old_way():
 
 
 # uncomment the one you want to use..
-#sdf = sdf_way()
-sdf = old_way()
+sdf = sdf_way()
+#sdf = old_way()
 
 if __name__ == "__main__":
     app.run(sdf)
