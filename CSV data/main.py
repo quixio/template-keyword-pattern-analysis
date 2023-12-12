@@ -6,6 +6,21 @@ import time
 from datetime import datetime
 import os
 import threading
+import json
+import gdown
+import zipfile
+
+# Download and extract file
+url = 'https://drive.google.com/uc?id=1zGgwr9r_EcaP6y4UCXQvdH2-tqsO0imP'
+output = './r_dataengineering_kwsextracted.zip'
+gdown.download(url, output, quiet=False)
+zip_file_path = output
+extract_path = '.'
+# Unzip the file
+with zipfile.ZipFile(zip_file_path, 'r') as zip_ref:
+     zip_ref.extractall(extract_path)
+print('Download and extraction complete.')
+
 
 # True = keep original timings.
 # False = No delay! Speed through it as fast as possible.
