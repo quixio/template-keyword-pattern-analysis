@@ -28,7 +28,6 @@ def process_rows(row: dict, state: State):
         print(f"Warning: row does not have an 'extracted_keywords' field or it's None: {row}")
         return
 
-
     print("---------------")
     print("extracted_keywords" in row)
     print("---------------")
@@ -136,7 +135,7 @@ def sdf_way():
     sdf = sdf.update(sum_keywords, stateful=True)
 
     # print
-    sdf = sdf.update(lambda row: print(row))
+    # sdf = sdf.update(lambda row: print(row))
 
     # publish to output topic
     sdf = sdf.to_topic(output_topic)
