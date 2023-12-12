@@ -10,7 +10,6 @@ input_topic = app.topic(os.environ["input"], value_deserializer=QuixDeserializer
 #output_topic = app.topic(os.environ["output"], value_serializer=QuixTimeseriesSerializer())
 output_topic = app.topic(os.environ["output"], value_serializer=JSONSerializer())
 
-sdf = app.dataframe(input_topic)
 #output_sdf = app.dataframe(output_topic)
 
 # Initialize an empty dictionary to store the counts and total scores
@@ -30,7 +29,7 @@ keyword_data = {}
 # if __name__ == "__main__":
 #     app.run(sdf)
 
-def reply(row: dict):
+def process_rows(row: dict, state: State):
     global keyword_data
 
     # Convert the 'extracted_keywords' field from a string to a list of tuples
@@ -38,38 +37,26 @@ def reply(row: dict):
         print(f"Warning: row does not have an 'extracted_keywords' field or it's None: {row}")
         return
 
-    data = ast.literal_eval(row['extracted_keywords'])
+    new_rows = dict(ast.literal_eval(row['extracted_keywords']))
+    new_rows['Timestamp'] = row['Timestamp']
 
-    print("---")
-    #print(data)
-    print("---")
-
-    # Process the data
-    for keyword, score in data:
-        if keyword not in keyword_data:
-            # If the keyword is not in the dictionary, add it with the current count and score
-            print(f"Adding kw {keyword}")
-            keyword_data[keyword] = {'count': 1, 'total_score': score}
+    sums_state = state.get("sums", {})
+    for key in row:
+        if key not in sums_state:
+            sums_state[key] = row[key]
         else:
-            # If the keyword is already in the dictionary, increment the count and add to the total score
-            print(f"incrementing kw {keyword}")
+            sums_state[key] += row[key]
 
-            keyword_data[keyword]['count'] += 1
-            keyword_data[keyword]['total_score'] += score
-
-    # Print the results
-    for keyword, data in keyword_data.items():
-        print(f"Keyword: {keyword}, Count: {data['count']}, Total Score: {data['total_score']}")
-        row["abc"] = "hi"
-
+        row[key] = sums_state[key]
     
-    return row        
+    state.set('sums', sums_state)
+       
 
 # def reply(row: dict):
 #     print(row)
 
 
-def expand_row(row: dict):
+def expand_keywords(row: dict):
     new_rows = row['extracted_keywords']
     #print(new_rows)
     new_rows['Timestamp'] = row['Timestamp']
@@ -77,7 +64,7 @@ def expand_row(row: dict):
     return new_rows
 
 
-def sumthing(row: dict, state: State):
+def sum_keywords(row: dict, state: State):
     sums_state = state.get("sums", {})
     for key in row:
         if key not in sums_state:
@@ -89,26 +76,28 @@ def sumthing(row: dict, state: State):
     
     state.set('sums', sums_state)
 
-sdf = sdf[sdf.contains('extracted_keywords')]
-sdf = sdf[sdf['extracted_keywords'].notnull()]
-sdf['extracted_keywords'] = sdf['extracted_keywords'].apply(lambda value: dict(ast.literal_eval(value)))
-#sdf = sdf.update(lambda row: print(row))
-#sdf = sdf.apply(lambda value: value['extracted_keywords'], expand=True)
-sdf = sdf.apply(expand_row)
-sdf = sdf.update(sumthing, stateful=True)
+def sdf_way():
+    sdf = app.dataframe(input_topic)
+    sdf = sdf[sdf.contains('extracted_keywords')]
+    sdf = sdf[sdf['extracted_keywords'].notnull()]
+    sdf['extracted_keywords'] = sdf['extracted_keywords'].apply(lambda value: dict(ast.literal_eval(value)))
+    sdf = sdf.apply(expand_keywords)
+    sdf = sdf.update(sum_keywords, stateful=True)
+    sdf = sdf.update(lambda row: print(row))
+    sdf = sdf.to_topic(output_topic)
+    return sdf
 
-sdf = sdf.update(lambda row: print(row))
+def old_way():
+    sdf = app.dataframe(input_topic)
+    sdf = sdf.update(process_rows, stateful=True)
+    sdf = sdf.update(lambda row: print(row))
+    sdf = sdf.to_topic(output_topic)
+    return sdf
 
-#sdf = sdf[['extracted_keywords']]
 
 
-
-#sdf = sdf.apply(reply, expand=True)
-#sdf = sdf[sdf.apply(lambda row: row is not None)]
-#sdf["Timestamp"] = sdf["Timestamp"].apply(lambda row: time.time_ns())
-# sdf["total"] = sdf.update(lambda r: 10)
-sdf = sdf.to_topic(output_topic)
-
+#sdf = sdf_way()
+sdf = old_way()
 
 if __name__ == "__main__":
     app.run(sdf)
