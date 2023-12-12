@@ -70,10 +70,10 @@ def reply(row: dict):
 
 sdf = sdf[sdf.contains('extracted_keywords')]
 sdf = sdf[sdf['extracted_keywords'].notnull()]
-
+sdf['extracted_keywords'] = sdf['extracted_keywords'].apply(lambda value: ast.literal_eval(value))
 sdf = sdf.update(lambda row: print(row))
-#sdf = sdf.apply(lambda value: value['extracted_keywords'], expand=True)
-#sdf = sdf.update(lambda row: print(row))
+sdf = sdf.apply(lambda value: value['extracted_keywords'], expand=True)
+sdf = sdf.update(lambda row: print(row))
 
 
 
