@@ -15,7 +15,7 @@ sdf = app.dataframe(input_topic)
 # Initialize an empty dictionary to store the counts and total scores
 keyword_data = {}
 
-def func(d):
+def func(d: dict):
     print(d)
 
 sdf = (
