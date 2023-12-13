@@ -11,12 +11,13 @@ output = './r_dataengineering_comments.zip'
 gdown.download(url, output, quiet=False)
 zip_file_path = output
 extract_path = '.'
+
 # Unzip the file
 with zipfile.ZipFile(zip_file_path, 'r') as zip_ref:
      zip_ref.extractall(extract_path)
 print('Download and extraction complete.')
 
-# We select a subsample of 5000 abstracts from ArXiv
+# We select a subsample of the archive or simply all
 data = []
 with open('./r_dataengineering_comments.jsonl', 'r', encoding='utf-8') as file:
     for line in file:
