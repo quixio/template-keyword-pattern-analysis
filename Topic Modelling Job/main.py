@@ -30,7 +30,7 @@ df = pd.DataFrame(data)
 df_basic = df[['created_utc','parent_id','author','body']].copy()
 df_basic['human_readable_time'] = pd.to_datetime(df_basic['created_utc'], unit='s')
 
-docs = df_basic["body"][0:5000]
+docs = df_basic["body"]
 
 # We define a number of topics that we know are in the documents
 zeroshot_topic_list = ["Kafka", "Flink", "Spark"]
