@@ -1,34 +1,53 @@
-import quixstreams as qx
-import time
-import datetime
-import math
-import os
+import json
+from bertopic import BERTopic
+from bertopic.representation import KeyBERTInspired
+import pandas as pd
+import gdown
+import zipfile
 
+# Download and extract file
+url = 'https://drive.google.com/uc?id=1jVUMJPfirdxHviPiWkeOuNmIzc97QLPV'
+output = './r_dataengineering_comments.zip'
+gdown.download(url, output, quiet=False)
+zip_file_path = output
+extract_path = '.'
+# Unzip the file
+with zipfile.ZipFile(zip_file_path, 'r') as zip_ref:
+     zip_ref.extractall(extract_path)
+print('Download and extraction complete.')
 
-# Quix injects credentials automatically to the client. 
-# Alternatively, you can always pass an SDK token manually as an argument.
-client = qx.QuixStreamingClient()
+# We select a subsample of 5000 abstracts from ArXiv
+data = []
+with open('./r_dataengineering_comments.jsonl', 'r', encoding='utf-8') as file:
+    for line in file:
+        # Convert each line to a dictionary
+        json_data = json.loads(line)
+        data.append(json_data)
 
-# Open the output topic where to write data out
-topic_producer = client.get_topic_producer(topic_id_or_name = os.environ["output"])
+# Create DataFrame from list of dictionaries
+df = pd.DataFrame(data)
+df_basic = df[['created_utc','parent_id','author','body']].copy()
+df_basic['human_readable_time'] = pd.to_datetime(df_basic['created_utc'], unit='s')
 
-# Set stream ID or leave parameters empty to get stream ID generated.
-stream = topic_producer.create_stream()
-stream.properties.name = "Hello World Python stream"
+docs = df_basic["body"][0:5000]
 
-# Add metadata about time series data you are about to send. 
-stream.timeseries.add_definition("ParameterA").set_range(-1.2, 1.2)
-stream.timeseries.buffer.time_span_in_milliseconds = 100
+# We define a number of topics that we know are in the documents
+zeroshot_topic_list = ["Kafka", "Flink", "Spark"]
 
-print("Sending values for 30 seconds.")
+# We fit our model using the zero-shot topics
+# and we define a minimum similarity. For each document,
+# if the similarity does not exceed that value, it will be used
+# for clustering instead.
+topic_model = BERTopic(
+    embedding_model="thenlper/gte-small", 
+    min_topic_size=15,
+    zeroshot_topic_list=zeroshot_topic_list,
+    zeroshot_min_similarity=.85,
+    representation_model=KeyBERTInspired()
+)
+topics, probs = topic_model.fit_transform(docs)
 
-for index in range(0, 3000):
-    stream.timeseries \
-        .buffer \
-        .add_timestamp(datetime.datetime.utcnow()) \
-        .add_value("ParameterA", math.sin(index / 200.0) + math.sin(index) / 5.0) \
-        .publish()
-    time.sleep(0.01)
+topic_model.get_topic_info()
 
-print("Closing stream")
-stream.close()
+embedding_model = "thenlper/gte-small"
+topic_model.save("./state/deng_model_dir", serialization="safetensors", save_ctfidf=False, save_embedding_model=embedding_model)
