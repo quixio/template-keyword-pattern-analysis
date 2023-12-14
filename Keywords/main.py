@@ -131,13 +131,13 @@ def sum_keywords(row: dict, state: State):
 
         if key not in sums_state or key == "Timestamp":
             print("-2b-")
-            sums_state[key] = 1#row[key]
+            sums_state[key] = row[key]
         else:
             print("-2c-")
-            sums_state[key] += 1#row[key]
+            sums_state[key] += row[key]
         
-        if key == "Timestamp":
-            sums_state[key] = row[key]
+        # if key == "Timestamp":
+        #     sums_state[key] = row[key]
 
         print("-2d-")
         print(row[key])
@@ -149,8 +149,8 @@ def sum_keywords(row: dict, state: State):
     state.set('sums', sums_state)
     time.sleep(0.3)
 
-
-    return sums_state
+    return row
+    #return sums_state
 
 
 def sdf_way():
