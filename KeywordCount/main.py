@@ -75,10 +75,8 @@ def sum_keywords(row: dict, state: State):
     state.set('counts', counts)
 
     #print("--")
-    #print(counts)
+    print(return_data)
     #print("--")
-
-    counts["period"] = "10m"
 
     return return_data
 
