@@ -28,14 +28,27 @@ def sum_keywords(row: dict, state: State):
     print("--")
 
     if clear_state:
-        print("Clearing state")
+        print("Initializing state")
 
-        state.set("timestamps", {})
+        state.set("counts", {})
+        state.set("window_start", datetime.fromtimestamp(row['Timestamp'] / 1e9))
         clear_state = False
 
-    timestamps = state.get("timestamps", {})
+    counts = state.get("counts", {})
+    window_start = state.get("window_start")
 
     current_time = datetime.fromtimestamp(row['Timestamp'] / 1e9)
+
+    if current_time - window_start > timedelta(minutes=15):
+        print("15 minute window has ended")
+        print("--")
+        print(counts)
+        print("--")
+
+        print("Clearing state")
+        state.set("counts", {})
+        state.set("window_start", current_time)
+        counts = {}
 
     for key in row:
         print("--")
@@ -45,27 +58,13 @@ def sum_keywords(row: dict, state: State):
         if key == "Timestamp":
             continue
 
-        # Update counts for current time
-        current_counts = timestamps.get(current_time.isoformat(), [])
-        keyword_count = next((item for item in current_counts if key in item), None)
-        if keyword_count is None:
-            keyword_count = {key: 1}
-            current_counts.append(keyword_count)
-        else:
-            keyword_count[key] += 1
-        timestamps[current_time.isoformat()] = current_counts
+        # Update counts for current keyword
+        counts[key] = counts.get(key, 0) + 1
 
-    # Delete counts older than 15 minutes
-    for timestamp in list(timestamps.keys()):
-        timestamp_datetime = datetime.fromisoformat(timestamp)
-        if current_time - timestamp_datetime > timedelta(minutes=15):
-            print(f"Deleting {timestamp}")
-            del timestamps[timestamp]
-
-    state.set('timestamps', timestamps)
+    state.set('counts', counts)
 
     print("--")
-    print(timestamps)
+    print(counts)
     print("--")
 
     return row
