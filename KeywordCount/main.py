@@ -5,7 +5,7 @@ import time
 import ast
 
 
-app = Application.Quix("keywords-2", auto_offset_reset="earliest")
+app = Application.Quix("keywords-3", auto_offset_reset="earliest")
 input_topic = app.topic(os.environ["input"], value_deserializer=QuixDeserializer())
 output_topic = app.topic(os.environ["output"], value_serializer=JSONSerializer())
 
