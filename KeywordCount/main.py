@@ -51,7 +51,7 @@ def sum_keywords(row: dict, state: State):
             if period not in counts:
                 counts[period] = {}
             
-        counts[period][key] = counts[period].get(key, 0) + 1
+            counts[period][key] = counts[period].get(key, 0) + 1
 
     state.set('counts', counts)
 
