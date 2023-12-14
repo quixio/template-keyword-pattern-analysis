@@ -128,13 +128,18 @@ def sum_keywords(row: dict, state: State):
     for key in row:
         print("-2a-")
         print(key)
-        if key not in sums_state:
-            print("-2b-")
-            sums_state[key] = row[key]
-        else:
-            print("-2c-")
-            sums_state[key] += row[key]
 
+        val = row[key]
+        if isinstance(val, int):
+            if key not in sums_state:
+                print("-2b-")
+                sums_state[key] = row[key]
+            else:
+                print("-2c-")
+                sums_state[key] += row[key]
+        else:
+            print(f"{val} not an int")
+            
         print("-2d-")
         print(row[key])
         row[key] = sums_state[key]
