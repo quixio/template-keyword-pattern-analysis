@@ -115,6 +115,7 @@ def sum_keywords(row: dict, state: State):
 
     print("-1-")
     print(row)
+    ts = row["Timestamp"]
 
     if clear_state:
         state.set("sums", {})
@@ -129,7 +130,7 @@ def sum_keywords(row: dict, state: State):
         print("-2a-")
         print(key)
 
-        if key not in sums_state:
+        if key not in sums_state or key == "Timestamp":
             print("-2b-")
             sums_state[key] = row[key]
         else:
