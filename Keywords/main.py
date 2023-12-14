@@ -65,7 +65,11 @@ def process_rows(row: dict, state: State):
     # get/add to/from state and sum the values
     for key in new_rows:
         if key not in sums_state:
-            sums_state[key] = new_rows[key]
+            val = new_rows[key]
+            if isinstance(val, int):
+                sums_state[key] = val
+            else:
+                print(f"bad int value {val}")
         else:
             sums_state[key] += new_rows[key]
 
