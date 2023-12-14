@@ -112,7 +112,7 @@ def sum_keywords(row: dict, state: State):
 
         row[key] = sums_state[key]
     
-    state.set('sums', sums_state)
+    #state.set('sums', sums_state)
 
 def sdf_way():
     sdf = app.dataframe(input_topic)
