@@ -41,9 +41,9 @@ def sum_keywords(row: dict, state: State):
 
     if current_time - window_start > timedelta(minutes=15):
         print("15 minute window has ended")
-        print("--")
+        print("************************************")
         print(counts)
-        print("--")
+        print("************************************")
 
         print("Clearing state")
         state.set("counts", {})
