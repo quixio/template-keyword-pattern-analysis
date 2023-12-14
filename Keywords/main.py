@@ -172,7 +172,9 @@ def sdf_way():
     sdf = sdf.update(sum_keywords, stateful=True)
 
     # print
+    print("====")
     sdf = sdf.update(lambda row: print(row))
+    print("====")
 
     # publish to output topic
     sdf = sdf.to_topic(output_topic)
