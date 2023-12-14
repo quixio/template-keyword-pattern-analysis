@@ -43,7 +43,7 @@ def sum_keywords(row: dict, state: State):
     print(f"wstart = {window_start}, current_time = {current_time}, delta = {current_time - window_start}")
 
     return_data = {}
-    if current_time - window_start > timedelta(minutes=1):
+    if current_time - window_start > timedelta(seconds=20):
 
         # with Producer(broker_address="kafka-k1.quix.io:9093") as producer:
         #     producer.produce(
@@ -58,6 +58,7 @@ def sum_keywords(row: dict, state: State):
         print("************************************")
 
         return_data = counts
+        return_data["period"] = "1m"
 
         print("Clearing state")
         state.set("counts", {})
