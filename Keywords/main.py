@@ -124,6 +124,11 @@ def sdf_way():
     # parse extracted keyword column (change string to dict)
 
     sdf = sdf.update(lambda row: print(row))
+
+    # condider using....
+    # Convert the string to a dictionary
+    # my_dict = json.loads(value)
+
     sdf['extracted_keywords'] = sdf['extracted_keywords'].apply(lambda value: dict(ast.literal_eval(value)))
     # sdf = sdf.update(lambda row: print(row))
 
