@@ -147,7 +147,7 @@ def sum_keywords(row: dict, state: State):
     print(sums_state)
 
     state.set('sums', sums_state)
-    time.sleep(0.3)
+    #time.sleep(0.3)
 
     return row
     #return sums_state
