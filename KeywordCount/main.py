@@ -20,6 +20,32 @@ def expand_keywords(row: dict):
     new_rows['Timestamp'] = row['Timestamp']
     return new_rows
 
+
+
+
+def time_delta_check(counts, state, current_time, window_start, delta_seconds):
+    if current_time - window_start > timedelta(seconds=delta_seconds):
+
+        # with Producer(broker_address="kafka-k1.quix.io:9093") as producer:
+        #     producer.produce(
+        #         topic="counts",
+        #         key="kee",
+        #         value="val",
+        #     )
+
+        print("1 minute window has ended, will return this.....")
+        print("************************************")
+        #print(counts)
+        print("************************************")
+
+        return_data = counts
+        return_data["period"] = "1m"
+
+        print("Clearing state")
+        state.set("counts", {})
+        state.set("window_start", current_time.isoformat())
+        counts = {}
+
 clear_state = True
 def sum_keywords(row: dict, state: State):
     global clear_state
@@ -42,33 +68,11 @@ def sum_keywords(row: dict, state: State):
 
     print(f"wstart = {window_start}, current_time = {current_time}, delta = {current_time - window_start}")
 
-    return_data = {}
-    if current_time - window_start > timedelta(seconds=20):
-
-        # with Producer(broker_address="kafka-k1.quix.io:9093") as producer:
-        #     producer.produce(
-        #         topic="counts",
-        #         key="kee",
-        #         value="val",
-        #     )
-
-        print("1 minute window has ended, will return this.....")
-        print("************************************")
-        #print(counts)
-        print("************************************")
-
-        return_data = counts
-        return_data["period"] = "1m"
-
-        print("Clearing state")
-        state.set("counts", {})
-        state.set("window_start", current_time.isoformat())
-        counts = {}
+    return_data = {
+        "one_minute_data": time_delta_check(counts, state, current_time, window_start, 60)
+    }
 
     for key in row:
-        # print("--")
-        # print(f"{key}")
-
         if key == "Timestamp":
             continue
 
@@ -77,11 +81,7 @@ def sum_keywords(row: dict, state: State):
 
     state.set('counts', counts)
 
-    #print("--")
-    # if return_data != {}:
-    #     print(return_data)
-    #print("--")
-    #print(counts)
+
 
     return return_data
 
