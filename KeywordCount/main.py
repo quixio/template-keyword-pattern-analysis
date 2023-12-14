@@ -55,7 +55,13 @@ def sum_keywords(row: dict, state: State):
 
     state.set('counts', counts)
 
-    return_data = time_delta_check(counts["one_minute_data"], state, current_time, window_start, 60)
+    print("********************")
+    for p in counts:
+        print(p)
+    print("********************")
+
+    return_data = {}
+    #return_data = time_delta_check(counts["one_minute_data"], state, current_time, window_start, 60)
     #return_data = time_delta_check(counts["15_minute_data"], state, current_time, window_start, 900)
 
     return return_data
