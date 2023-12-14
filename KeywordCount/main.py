@@ -30,14 +30,12 @@ def sum_keywords(row: dict, state: State):
     if clear_state:
         print("Clearing state")
 
-        state.set("counts_1min", {})
-        state.set("counts_15min", {})
+        state.set("timestamps", {})
         clear_state = False
 
-    counts_1min = state.get("counts_1min", {})
-    counts_15min = state.get("counts_15min", {})
+    timestamps = state.get("timestamps", {})
 
-    current_time = datetime.fromtimestamp(row['Timestamp'] / 1e9)
+    current_time = datetime.fromtimestamp(row['Timestamp'] / 1e9).isoformat()
 
     for key in row:
         print("--")
@@ -47,31 +45,22 @@ def sum_keywords(row: dict, state: State):
         if key == "Timestamp":
             continue
 
-        # Update counts for 1 minute
-        count, _ = counts_1min.get(key, (0, current_time.isoformat()))
-        counts_1min[key] = (count + 1, current_time.isoformat())
-        for k, (count, timestamp) in list(counts_1min.items()):
-            timestamp = datetime.fromisoformat(timestamp)
-            if current_time - timestamp > timedelta(minutes=1):
-                print(f"Deleting {k}")
-                del counts_1min[k]
+        # Update counts for current time
+        current_counts = timestamps.get(current_time, [])
+        current_counts.append({key: current_counts.get(key, 0) + 1})
+        timestamps[current_time] = current_counts
 
-        # Update counts for 15 minutes
-        count, _ = counts_15min.get(key, (0, current_time.isoformat()))
-        counts_15min[key] = (count + 1, current_time.isoformat())
-        for k, (count, timestamp) in list(counts_15min.items()):
-            timestamp = datetime.fromisoformat(timestamp)
-            if current_time - timestamp > timedelta(minutes=15):
-                print(f"Deleting {k}")
-                del counts_15min[k]
+    # Delete counts older than 15 minutes
+    for timestamp in list(timestamps.keys()):
+        timestamp_datetime = datetime.fromisoformat(timestamp)
+        if current_time - timestamp_datetime > timedelta(minutes=15):
+            print(f"Deleting {timestamp}")
+            del timestamps[timestamp]
 
-    state.set('counts_1min', counts_1min)
-    state.set('counts_15min', counts_15min)
+    state.set('timestamps', timestamps)
 
     print("--")
-    print(counts_1min)
-    print("--")
-    print(counts_15min)
+    print(timestamps)
     print("--")
 
     return row
