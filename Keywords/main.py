@@ -106,6 +106,7 @@ def sum_keywords(row: dict, state: State):
     print("-1-")
     print(row)
 
+    state.set("sums", {})
 
     sums_state = state.get("sums", {})
     
