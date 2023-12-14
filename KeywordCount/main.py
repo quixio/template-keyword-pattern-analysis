@@ -42,7 +42,7 @@ def sum_keywords(row: dict, state: State):
 
     print(f"wstart = {window_start}, current_time = {current_time}, delta = {current_time - window_start}")
 
-    # return_data = {}
+    return_data = {}
     if current_time - window_start > timedelta(minutes=1):
 
         # with Producer(broker_address="kafka-k1.quix.io:9093") as producer:
@@ -57,7 +57,7 @@ def sum_keywords(row: dict, state: State):
         #print(counts)
         print("************************************")
 
-        # return_data = counts
+        return_data = counts
 
         print("Clearing state")
         state.set("counts", {})
@@ -82,7 +82,7 @@ def sum_keywords(row: dict, state: State):
     #print("--")
     #print(counts)
 
-    return counts
+    return return_data
 
 # def sum_keywords(row: dict, state: State):
 #     global clear_state
@@ -151,9 +151,9 @@ def sdf_way():
     sdf = sdf.apply(sum_keywords, stateful=True)
 
     # print
-    #print("====")
-    #sdf = sdf.update(lambda row: print(f"&&&&&&&&&&&&&&&{row}&&&&&&&&&&&&&&&&"))
-    #print("====")
+    print("====")
+    sdf = sdf.update(lambda row: print(f"&&&&&&&&&&&&&&&{row}&&&&&&&&&&&&&&&&"))
+    print("====")
 
     # publish to output topic
     sdf = sdf.to_topic(output_topic)
