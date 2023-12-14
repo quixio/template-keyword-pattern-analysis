@@ -146,6 +146,8 @@ def sum_keywords(row: dict, state: State):
     state.set('sums', sums_state)
     time.sleep(0.3)
 
+    return row
+
 
 def sdf_way():
     sdf = app.dataframe(input_topic)
@@ -169,7 +171,7 @@ def sdf_way():
     sdf = sdf.apply(expand_keywords)
 
     # sum keywords and save to state
-    sdf = sdf.update(sum_keywords, stateful=True)
+    sdf = sdf.apply(sum_keywords, stateful=True)
 
     # print
     print("====")
