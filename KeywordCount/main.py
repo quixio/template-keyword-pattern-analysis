@@ -40,6 +40,8 @@ def sum_keywords(row: dict, state: State):
 
     current_time = datetime.fromtimestamp(row['Timestamp'] / 1e9)
 
+    print(f"wstart = {window_start}, current_time = {current_time}")
+
     # return_data = {}
     if current_time - window_start > timedelta(minutes=1):
 
@@ -78,6 +80,7 @@ def sum_keywords(row: dict, state: State):
     # if return_data != {}:
     #     print(return_data)
     #print("--")
+    print(counts)
 
     return counts
 
