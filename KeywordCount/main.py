@@ -54,7 +54,7 @@ def sum_keywords(row: dict, state: State):
 
         print("1 minute window has ended, will return this.....")
         print("************************************")
-        print(counts)
+        #print(counts)
         print("************************************")
 
         # return_data = counts
@@ -80,7 +80,7 @@ def sum_keywords(row: dict, state: State):
     # if return_data != {}:
     #     print(return_data)
     #print("--")
-    print(counts)
+    #print(counts)
 
     return counts
 
