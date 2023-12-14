@@ -39,7 +39,7 @@ def time_delta_check(counts, state, current_time, window_start, delta_seconds):
         print("************************************")
 
         return_data = counts
-        return_data["period"] = "1m"
+        return_data["period"] = f"{delta_seconds} seconds"
 
         print("Clearing state")
         state.set("counts", {})
@@ -69,7 +69,7 @@ def sum_keywords(row: dict, state: State):
     print(f"wstart = {window_start}, current_time = {current_time}, delta = {current_time - window_start}")
 
     return_data = {
-        "one_minute_data": time_delta_check(counts, state, current_time, window_start, 60)
+        "one_minute_data": time_delta_check(counts["one_minute_data"], state, current_time, window_start, 60)
     }
 
     for key in row:
@@ -77,7 +77,7 @@ def sum_keywords(row: dict, state: State):
             continue
 
         # Update counts for current keyword
-        counts[key] = counts.get(key, 0) + 1
+        counts["one_minute_data"][key] = counts.get(key, 0) + 1
 
     state.set('counts', counts)
 
