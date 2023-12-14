@@ -75,7 +75,7 @@ def sum_keywords(row: dict, state: State):
     state.set('counts', counts)
 
     #print("--")
-    if return_data != '{}':
+    if return_data != {}:
         print(return_data)
     #print("--")
 
