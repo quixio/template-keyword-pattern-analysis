@@ -29,6 +29,8 @@ def sum_keywords(row: dict, state: State):
     print("--")
 
     if clear_state:
+        print("Clearing state")
+
         state.set("counts_1min", {})
         state.set("counts_15min", {})
         clear_state = False
@@ -48,6 +50,7 @@ def sum_keywords(row: dict, state: State):
 
         # Update counts for 1 minute
         counts_1min[key] = counts_1min.get(key, 0) + 1
+        print(counts_1min[key])
         for k, v in list(counts_1min.items()):
             timestamp = datetime.fromtimestamp(v)
             if current_time - timestamp > timedelta(minutes=1):
