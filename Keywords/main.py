@@ -71,7 +71,11 @@ def process_rows(row: dict, state: State):
             else:
                 print(f"bad int value {val}")
         else:
-            sums_state[key] += new_rows[key]
+            val = new_rows[key]
+            if isinstance(val, int):
+                sums_state[key] += val
+            else:
+                print(f"bad int value {val}")
 
         new_rows[key] = sums_state[key]
     
