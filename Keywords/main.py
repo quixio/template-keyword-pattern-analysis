@@ -136,7 +136,7 @@ def sdf_way():
     # sdf = sdf.update(lambda row: print(row))
 
     # expand keywords from a nested dict to rows (keeping the timestamp)
-    sdf = sdf.update(expand_keywords)
+    sdf = sdf.apply(expand_keywords)
 
     # sum keywords and save to state
     sdf = sdf.update(sum_keywords, stateful=True)
