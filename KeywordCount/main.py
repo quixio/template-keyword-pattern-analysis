@@ -46,11 +46,11 @@ def sum_keywords(row: dict, state: State):
         if key == "Timestamp":
             continue
 
-            for period in counts:
-                print (period)
-                if period not in counts:
-                    counts[period] = {}
-                
+        for period in counts:
+            print (period)
+            if period not in counts:
+                counts[period] = {}
+            
         counts[period][key] = counts[period].get(key, 0) + 1
 
     state.set('counts', counts)
