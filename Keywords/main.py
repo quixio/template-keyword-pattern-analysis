@@ -173,7 +173,7 @@ def sdf_way():
 
     # print
     print("====")
-    sdf = sdf.update(lambda row: print(row))
+    sdf = sdf.update(lambda row: print(f"&&&&&&&&&&&&&&&{row}&&&&&&&&&&&&&&&&"))
     print("====")
 
     # publish to output topic
