@@ -24,6 +24,10 @@ clear_state = True
 def sum_keywords(row: dict, state: State):
     global clear_state
 
+    print("--")
+    print(row)
+    print("--")
+
     if clear_state:
         state.set("counts_1min", {})
         state.set("counts_15min", {})
