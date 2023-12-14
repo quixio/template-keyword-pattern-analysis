@@ -53,7 +53,7 @@ def sum_keywords(row: dict, state: State):
     for key in row:
         print("--")
         print(f"{key}")
-        print("--")
+        #print("--")
 
         if key == "Timestamp":
             continue
@@ -63,9 +63,9 @@ def sum_keywords(row: dict, state: State):
 
     state.set('counts', counts)
 
-    print("--")
-    print(counts)
-    print("--")
+    #print("--")
+    #print(counts)
+    #print("--")
 
     return row
 
