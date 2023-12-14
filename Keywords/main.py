@@ -67,13 +67,13 @@ def process_rows(row: dict, state: State):
         if key not in sums_state:
             val = new_rows[key]
             if isinstance(val, int):
-                sums_state[key] = val
+                sums_state[key] = 1#val
             else:
                 print(f"bad int value {val}")
         else:
             val = new_rows[key]
             if isinstance(val, int):
-                sums_state[key] += val
+                sums_state[key] += 1#val
             else:
                 print(f"bad int value {val}")
 
@@ -108,7 +108,7 @@ def expand_keywords(row: dict):
     new_rows['Timestamp'] = row['Timestamp']
     return new_rows
 
-clear_state = False
+clear_state = True
 def sum_keywords(row: dict, state: State):
     global clear_state
 
@@ -131,10 +131,10 @@ def sum_keywords(row: dict, state: State):
 
         if key not in sums_state or key == "Timestamp":
             print("-2b-")
-            sums_state[key] = row[key]
+            sums_state[key] = 1#row[key]
         else:
             print("-2c-")
-            sums_state[key] += row[key]
+            sums_state[key] += 1#row[key]
             
         print("-2d-")
         print(row[key])
