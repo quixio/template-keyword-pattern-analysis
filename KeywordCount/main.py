@@ -40,7 +40,7 @@ def sum_keywords(row: dict, state: State):
 
     for key in row:
         print("--")
-        print(f"{key")
+        print(f"{key}")
         print("--")
 
         if key == "Timestamp":
