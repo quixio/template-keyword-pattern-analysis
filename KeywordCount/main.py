@@ -52,6 +52,9 @@ def sum_keywords(row: dict, state: State):
         if key == "Timestamp":
             continue
 
+        if "one_minute_data" not in counts:
+            counts["one_minute_data"] = {}
+                
         counts["one_minute_data"][key] = counts["one_minute_data"].get(key, 0) + 1
 
     state.set('counts', counts)
