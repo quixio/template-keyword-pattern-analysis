@@ -17,14 +17,8 @@ def expand_keywords(row: dict):
 
 def time_delta_check(counts, state, current_time, window_start, delta_seconds):
     if current_time - window_start > timedelta(seconds=delta_seconds):
-        print("1 minute window has ended, will return this.....")
-        print("************************************")
-        print(counts)
-        print("************************************")
-
         return_data = counts
         return_data["period"] = f"{delta_seconds} seconds"
-
         print("Clearing state")
         state.set("counts", {})
         state.set("window_start", current_time.isoformat())
@@ -52,14 +46,17 @@ def sum_keywords(row: dict, state: State):
         if key == "Timestamp":
             continue
 
-        if "one_minute_data" not in counts:
-            counts["one_minute_data"] = {}
+            for period in counts:
+                print (period)
+                if period not in counts:
+                    counts[period] = {}
                 
-        counts["one_minute_data"][key] = counts["one_minute_data"].get(key, 0) + 1
+        counts[period][key] = counts[period].get(key, 0) + 1
 
     state.set('counts', counts)
 
     return_data = time_delta_check(counts["one_minute_data"], state, current_time, window_start, 60)
+    #return_data = time_delta_check(counts["15_minute_data"], state, current_time, window_start, 900)
 
     return return_data
 
