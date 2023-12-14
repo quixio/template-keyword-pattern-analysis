@@ -32,7 +32,7 @@ def sum_keywords(row: dict, state: State):
     counts_1min = state.get("counts_1min", {})
     counts_15min = state.get("counts_15min", {})
 
-    current_time = datetime.fromtimestamp(row['Timestamp'])
+    current_time = datetime.fromtimestamp(row['Timestamp']/1e9)
 
     for key in row:
         if key == "Timestamp":
