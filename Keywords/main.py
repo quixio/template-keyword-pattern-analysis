@@ -122,6 +122,7 @@ def sum_keywords(row: dict, state: State):
         row[key] = sums_state[key]
     
     print("-3-")
+    print(sums_state)
 
     #state.set('sums', sums_state)
 
