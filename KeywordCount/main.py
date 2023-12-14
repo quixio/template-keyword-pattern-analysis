@@ -49,7 +49,6 @@ def sum_keywords(row: dict, state: State):
         #         value="val",
         #     )
 
-
         print("1 minute window has ended")
         print("************************************")
         print(counts)
