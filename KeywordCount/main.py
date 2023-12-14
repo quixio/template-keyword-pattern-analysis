@@ -6,36 +6,20 @@ import ast
 from datetime import datetime, timedelta
 from quixstreams.kafka import Producer
 
-
-
 app = Application.Quix("keywords-3", auto_offset_reset="earliest")
 input_topic = app.topic(os.environ["input"], value_deserializer=QuixDeserializer())
 output_topic = app.topic(os.environ["output"], value_serializer=JSONSerializer())
 
-# expand keywords from a nested dict to rows (keeping the timestamp)
 def expand_keywords(row: dict):
     new_rows = row['extracted_keywords']
-
-    # we need the timestamp, otherwise we could use sdf's expand function
     new_rows['Timestamp'] = row['Timestamp']
     return new_rows
 
-
-
-
 def time_delta_check(counts, state, current_time, window_start, delta_seconds):
     if current_time - window_start > timedelta(seconds=delta_seconds):
-
-        # with Producer(broker_address="kafka-k1.quix.io:9093") as producer:
-        #     producer.produce(
-        #         topic="counts",
-        #         key="kee",
-        #         value="val",
-        #     )
-
         print("1 minute window has ended, will return this.....")
         print("************************************")
-        #print(counts)
+        print(counts)
         print("************************************")
 
         return_data = counts
@@ -46,18 +30,15 @@ def time_delta_check(counts, state, current_time, window_start, delta_seconds):
         state.set("window_start", current_time.isoformat())
         counts = {}
 
+        return return_data
+
 clear_state = True
 def sum_keywords(row: dict, state: State):
     global clear_state
 
-    # print("--")
-    # print(row)
-    # print("--")
-
     if clear_state:
         print("Initializing state")
-
-        state.set("counts", {})
+        state.set("counts", {"one_minute_data": {}})
         state.set("window_start", datetime.fromtimestamp(row['Timestamp'] / 1e9).isoformat())
         clear_state = False
 
@@ -66,97 +47,25 @@ def sum_keywords(row: dict, state: State):
 
     current_time = datetime.fromtimestamp(row['Timestamp'] / 1e9)
 
-    print(f"wstart = {window_start}, current_time = {current_time}, delta = {current_time - window_start}")
-
-    return_data = {
-        "one_minute_data": time_delta_check(counts["one_minute_data"], state, current_time, window_start, 60)
-    }
-
     for key in row:
         if key == "Timestamp":
             continue
 
-        # Update counts for current keyword
-        counts["one_minute_data"][key] = counts.get(key, 0) + 1
+        counts["one_minute_data"][key] = counts["one_minute_data"].get(key, 0) + 1
 
     state.set('counts', counts)
 
-
+    return_data = time_delta_check(counts["one_minute_data"], state, current_time, window_start, 60)
 
     return return_data
 
-# def sum_keywords(row: dict, state: State):
-#     global clear_state
-
-
-#     print("-1-")
-#     print(row)
-
-#     if clear_state:
-#         state.set("counts", {})
-#         clear_state = False
-
-#     sums_state = state.get("counts", {})
-    
-#     print("-2-")
-#     print(sums_state)
-
-#     for key in row:
-#         print("-2a-")
-#         print(key)
-
-#         if key not in sums_state or key == "Timestamp":
-#             print("-2b-")
-#             sums_state[key] = 1#row[key]
-#         else:
-#             print("-2c-")
-#             sums_state[key] += 1#row[key]
-        
-#         if key == "Timestamp":
-#             sums_state[key] = row[key]
-
-#         print("-2d-")
-#         print(row[key])
-#         row[key] = sums_state[key]
-    
-#     print("-3-")
-#     print(sums_state)
-
-#     state.set('counts', sums_state)
-#     #time.sleep(0.3)
-
-#     return row
-#     #return sums_state
-
-
 def sdf_way():
     sdf = app.dataframe(input_topic)
-
-    # filter data
     sdf = sdf[sdf.contains('extracted_keywords')]
     sdf = sdf[sdf['extracted_keywords'].notnull()]
-
-    #sdf = sdf.update(lambda row: print(row))
-
-    # consider using....
-    # Convert the string to a dictionary
-    # my_dict = json.loads(value)
-
     sdf['extracted_keywords'] = sdf['extracted_keywords'].apply(lambda value: dict(ast.literal_eval(value)))
-    # sdf = sdf.update(lambda row: print(row))
-
-    # expand keywords from a nested dict to rows (keeping the timestamp)
     sdf = sdf.apply(expand_keywords)
-
-    # sum keywords and save to state
     sdf = sdf.apply(sum_keywords, stateful=True)
-
-    # print
-    print("====")
-    sdf = sdf.update(lambda row: print(f"&&&&&&&&&&&&&&&{row}&&&&&&&&&&&&&&&&"))
-    print("====")
-
-    # publish to output topic
     sdf = sdf.to_topic(output_topic)
     return sdf
 
