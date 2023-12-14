@@ -47,7 +47,12 @@ def sum_keywords(row: dict, state: State):
 
         # Update counts for current time
         current_counts = timestamps.get(current_time, [])
-        current_counts.append({key: current_counts.get(key, 0) + 1})
+        keyword_count = next((item for item in current_counts if key in item), None)
+        if keyword_count is None:
+            keyword_count = {key: 1}
+            current_counts.append(keyword_count)
+        else:
+            keyword_count[key] += 1
         timestamps[current_time] = current_counts
 
     # Delete counts older than 15 minutes
