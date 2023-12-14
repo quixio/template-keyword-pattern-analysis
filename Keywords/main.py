@@ -130,7 +130,7 @@ def sum_keywords(row: dict, state: State):
         print(key)
 
         val = row[key]
-        if isinstance(val, int):
+        if isinstance(val, float):
             if key not in sums_state:
                 print("-2b-")
                 sums_state[key] = row[key]
