@@ -39,7 +39,7 @@ def sum_keywords(row: dict, state: State):
 
     current_time = datetime.fromtimestamp(row['Timestamp'] / 1e9)
 
-    if current_time - window_start > timedelta(minutes=15):
+    if current_time - window_start > timedelta(minutes=1):
         print("15 minute window has ended")
         print("************************************")
         print(counts)
