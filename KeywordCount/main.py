@@ -1,14 +1,3 @@
-# this code recieves data with a column called 'extracted_keywords'
-#
-# "extracted_keywords": [
-#     "[('data engineer', 0.6018), ('software engineering skills', 0.5121), ('software engineer', 0.4633), ('software engineering principles', 0.2394), ('someone', 0.1321)]"
-# ]
-#
-# The output is the sum of the values for the extracted_keywords
-#
-
-
-
 from quixstreams import Application, State
 from quixstreams.models.serializers.quix import QuixDeserializer, QuixTimeseriesSerializer, JSONSerializer
 import os
@@ -19,7 +8,6 @@ import ast
 app = Application.Quix("keywords-2", auto_offset_reset="earliest")
 input_topic = app.topic(os.environ["input"], value_deserializer=QuixDeserializer())
 output_topic = app.topic(os.environ["output"], value_serializer=JSONSerializer())
-
 
 
 # expand keywords from a nested dict to rows (keeping the timestamp)
@@ -82,8 +70,6 @@ def sdf_way():
     sdf = sdf[sdf.contains('extracted_keywords')]
     sdf = sdf[sdf['extracted_keywords'].notnull()]
 
-    # parse extracted keyword column (change string to dict)
-
     #sdf = sdf.update(lambda row: print(row))
 
     # consider using....
@@ -100,9 +86,9 @@ def sdf_way():
     sdf = sdf.apply(sum_keywords, stateful=True)
 
     # print
-    print("====")
-    sdf = sdf.update(lambda row: print(f"&&&&&&&&&&&&&&&{row}&&&&&&&&&&&&&&&&"))
-    print("====")
+    #print("====")
+    #sdf = sdf.update(lambda row: print(f"&&&&&&&&&&&&&&&{row}&&&&&&&&&&&&&&&&"))
+    #print("====")
 
     # publish to output topic
     sdf = sdf.to_topic(output_topic)
