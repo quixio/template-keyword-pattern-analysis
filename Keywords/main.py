@@ -114,11 +114,19 @@ def sum_keywords(row: dict, state: State):
     print(sums_state)
 
     for key in row:
+        print("-2a-")
+        print(key)
         if key not in sums_state:
+            print("-2b-")
+
             sums_state[key] = row[key]
         else:
+            print("-2c-")
+
             sums_state[key] += row[key]
 
+        print("-2d-")
+        print(row[key])
         row[key] = sums_state[key]
     
     print("-3-")
