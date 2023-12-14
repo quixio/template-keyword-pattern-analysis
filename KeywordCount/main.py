@@ -50,10 +50,11 @@ def sum_keywords(row: dict, state: State):
 
         # Update counts for 1 minute
         counts_1min[key] = counts_1min.get(key, 0) + 1
-        print(counts_1min[key])
+        print(f"counts_1min[key] = {counts_1min[key]}")
         for k, v in list(counts_1min.items()):
             timestamp = datetime.fromtimestamp(v)
             if current_time - timestamp > timedelta(minutes=1):
+                print(f"Deleting {k}")
                 del counts_1min[k]
 
         # Update counts for 15 minutes
