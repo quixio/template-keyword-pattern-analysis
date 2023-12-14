@@ -98,11 +98,14 @@ def expand_keywords(row: dict):
 
     # we need the timestamp, otherwise we could use sdf's expand function
     new_rows['Timestamp'] = row['Timestamp']
-    print(new_rows)
     return new_rows
 
 
 def sum_keywords(row: dict, state: State):
+
+    print(row)
+
+
     sums_state = state.get("sums", {})
     for key in row:
         if key not in sums_state:
