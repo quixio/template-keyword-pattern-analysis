@@ -31,11 +31,11 @@ def sum_keywords(row: dict, state: State):
         print("Initializing state")
 
         state.set("counts", {})
-        state.set("window_start", datetime.fromtimestamp(row['Timestamp'] / 1e9))
+        state.set("window_start", datetime.fromtimestamp(row['Timestamp'] / 1e9).isoformat())
         clear_state = False
 
     counts = state.get("counts", {})
-    window_start = state.get("window_start")
+    window_start = datetime.fromisoformat(state.get("window_start"))
 
     current_time = datetime.fromtimestamp(row['Timestamp'] / 1e9)
 
@@ -47,7 +47,7 @@ def sum_keywords(row: dict, state: State):
 
         print("Clearing state")
         state.set("counts", {})
-        state.set("window_start", current_time)
+        state.set("window_start", current_time.isoformat())
         counts = {}
 
     for key in row:
