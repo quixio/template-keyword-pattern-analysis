@@ -21,6 +21,7 @@ def expand_keywords(row: dict):
 
 clear_state = True
 
+
 def sum_keywords(row: dict, state: State):
     global clear_state
 
@@ -49,18 +50,17 @@ def sum_keywords(row: dict, state: State):
             continue
 
         # Update counts for 1 minute
-        counts_1min[key] = counts_1min.get(key, 0) + 1
-        print(f"counts_1min[key] = {counts_1min[key]}")
-        for k, v in list(counts_1min.items()):
-            timestamp = datetime.fromtimestamp(v / 1e9)
+        count, _ = counts_1min.get(key, (0, current_time))
+        counts_1min[key] = (count + 1, current_time)
+        for k, (count, timestamp) in list(counts_1min.items()):
             if current_time - timestamp > timedelta(minutes=1):
                 print(f"Deleting {k}")
                 del counts_1min[k]
 
         # Update counts for 15 minutes
-        counts_15min[key] = counts_15min.get(key, 0) + 1
-        for k, v in list(counts_15min.items()):
-            timestamp = datetime.fromtimestamp(v / 1e9)
+        count, _ = counts_15min.get(key, (0, current_time))
+        counts_15min[key] = (count + 1, current_time)
+        for k, (count, timestamp) in list(counts_15min.items()):
             if current_time - timestamp > timedelta(minutes=15):
                 print(f"Deleting {k}")
                 del counts_15min[k]
