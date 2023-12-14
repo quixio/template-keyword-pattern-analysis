@@ -42,7 +42,7 @@ def sum_keywords(row: dict, state: State):
 
     if current_time - window_start > timedelta(minutes=1):
 
-        with Producer(broker_address="") as producer:
+        with Producer(broker_address="kafka-k1.quix.io:9093") as producer:
             producer.produce(
                 topic="counts",
                 key="kee",
