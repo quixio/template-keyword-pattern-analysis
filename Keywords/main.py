@@ -137,7 +137,7 @@ def sum_keywords(row: dict, state: State):
     print(sums_state)
 
     state.set('sums', sums_state)
-    time.sleep(3)
+    time.sleep(0.3)
 
 
 def sdf_way():
