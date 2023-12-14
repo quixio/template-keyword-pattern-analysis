@@ -100,13 +100,17 @@ def expand_keywords(row: dict):
     new_rows['Timestamp'] = row['Timestamp']
     return new_rows
 
-
+clear_state = True
 def sum_keywords(row: dict, state: State):
+    global clear_state
+
 
     print("-1-")
     print(row)
 
-    state.set("sums", {})
+    if clear_state:
+        state.set("sums", {})
+        clear_state = False
 
     sums_state = state.get("sums", {})
     
@@ -133,6 +137,8 @@ def sum_keywords(row: dict, state: State):
     print(sums_state)
 
     state.set('sums', sums_state)
+    time.sleep(3)
+
 
 def sdf_way():
     sdf = app.dataframe(input_topic)
