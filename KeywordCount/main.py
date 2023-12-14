@@ -24,9 +24,9 @@ clear_state = True
 def sum_keywords(row: dict, state: State):
     global clear_state
 
-    print("--")
-    print(row)
-    print("--")
+    # print("--")
+    # print(row)
+    # print("--")
 
     if clear_state:
         print("Initializing state")
@@ -63,8 +63,8 @@ def sum_keywords(row: dict, state: State):
         counts = {}
 
     for key in row:
-        print("--")
-        print(f"{key}")
+        # print("--")
+        # print(f"{key}")
 
         if key == "Timestamp":
             continue
