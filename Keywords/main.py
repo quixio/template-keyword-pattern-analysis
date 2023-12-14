@@ -103,10 +103,15 @@ def expand_keywords(row: dict):
 
 def sum_keywords(row: dict, state: State):
 
+    print("-1-")
     print(row)
 
 
     sums_state = state.get("sums", {})
+    
+    print("-2-")
+    print(sums_state)
+
     for key in row:
         if key not in sums_state:
             sums_state[key] = row[key]
@@ -115,6 +120,8 @@ def sum_keywords(row: dict, state: State):
 
         row[key] = sums_state[key]
     
+    print("-3-")
+
     #state.set('sums', sums_state)
 
 def sdf_way():
