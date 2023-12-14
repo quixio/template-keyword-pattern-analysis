@@ -38,7 +38,7 @@ def sum_keywords(row: dict, state: State):
     counts_1min = state.get("counts_1min", {})
     counts_15min = state.get("counts_15min", {})
 
-    current_time = datetime.fromtimestamp(row['Timestamp']/1e9)
+    current_time = datetime.fromtimestamp(row['Timestamp'] / 1e9)
 
     for key in row:
         print("--")
@@ -52,7 +52,7 @@ def sum_keywords(row: dict, state: State):
         counts_1min[key] = counts_1min.get(key, 0) + 1
         print(f"counts_1min[key] = {counts_1min[key]}")
         for k, v in list(counts_1min.items()):
-            timestamp = datetime.fromtimestamp(v/1e9)
+            timestamp = datetime.fromtimestamp(v / 1e9)
             if current_time - timestamp > timedelta(minutes=1):
                 print(f"Deleting {k}")
                 del counts_1min[k]
@@ -60,7 +60,7 @@ def sum_keywords(row: dict, state: State):
         # Update counts for 15 minutes
         counts_15min[key] = counts_15min.get(key, 0) + 1
         for k, v in list(counts_15min.items()):
-            timestamp = datetime.fromtimestamp(v/1e9)
+            timestamp = datetime.fromtimestamp(v / 1e9)
             if current_time - timestamp > timedelta(minutes=15):
                 del counts_15min[k]
 
