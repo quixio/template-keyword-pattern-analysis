@@ -4,6 +4,8 @@ import os
 import time
 import ast
 from datetime import datetime, timedelta
+from quixstreams.kafka import Producer
+
 
 
 app = Application.Quix("keywords-3", auto_offset_reset="earliest")
@@ -40,7 +42,16 @@ def sum_keywords(row: dict, state: State):
     current_time = datetime.fromtimestamp(row['Timestamp'] / 1e9)
 
     if current_time - window_start > timedelta(minutes=1):
-        print("15 minute window has ended")
+
+        with Producer(broker_address="localhost:9092") as producer:
+            producer.produce(
+                topic="counts",
+                key="kee",
+                value="val",
+            )
+
+
+        print("1 minute window has ended")
         print("************************************")
         print(counts)
         print("************************************")
