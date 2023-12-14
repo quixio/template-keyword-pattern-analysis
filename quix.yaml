@@ -55,6 +55,26 @@ deployments:
         description: Name of the output topic to write to.
         required: false
         value: transform
+  - name: KeywordCount
+    application: KeywordCount
+    deploymentType: Service
+    version: 0ca8b895d97e22a865007609f746f603c379968c
+    resources:
+      cpu: 200
+      memory: 500
+      replicas: 1
+    desiredStatus: Running
+    variables:
+      - name: input
+        inputType: InputTopic
+        description: Name of the input topic to listen to.
+        required: false
+        value: csv-data
+      - name: output
+        inputType: OutputTopic
+        description: Name of the output topic to write to.
+        required: false
+        value: counts
 
 # This section describes the Topics of the data pipeline
 topics:
