@@ -62,6 +62,7 @@ def sum_keywords(row: dict, state: State):
         for k, v in list(counts_15min.items()):
             timestamp = datetime.fromtimestamp(v / 1e9)
             if current_time - timestamp > timedelta(minutes=15):
+                print(f"Deleting {k}")
                 del counts_15min[k]
 
     state.set('counts_1min', counts_1min)
