@@ -71,7 +71,7 @@ def sum_keywords(row: dict, state: State):
 
         # Update counts for current keyword
         counts[key] = counts.get(key, 0) + 1
-        counts[key] = "10m"
+        counts["period"] = "10m"
 
     state.set('counts', counts)
 
