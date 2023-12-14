@@ -39,6 +39,10 @@ def sum_keywords(row: dict, state: State):
     current_time = datetime.fromtimestamp(row['Timestamp']/1e9)
 
     for key in row:
+        print("--")
+        print(f"{key")
+        print("--")
+
         if key == "Timestamp":
             continue
 
