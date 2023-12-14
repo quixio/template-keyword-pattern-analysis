@@ -3,6 +3,7 @@ from quixstreams.models.serializers.quix import QuixDeserializer, QuixTimeseries
 import os
 import time
 import ast
+from datetime import datetime, timedelta
 
 
 app = Application.Quix("keywords-3", auto_offset_reset="earliest")
@@ -19,48 +20,91 @@ def expand_keywords(row: dict):
     return new_rows
 
 clear_state = True
+
 def sum_keywords(row: dict, state: State):
     global clear_state
 
-
-    print("-1-")
-    print(row)
-
     if clear_state:
-        state.set("counts", {})
+        state.set("counts_1min", {})
+        state.set("counts_15min", {})
         clear_state = False
 
-    sums_state = state.get("counts", {})
-    
-    print("-2-")
-    print(sums_state)
+    counts_1min = state.get("counts_1min", {})
+    counts_15min = state.get("counts_15min", {})
+
+    current_time = datetime.fromtimestamp(row['Timestamp'])
 
     for key in row:
-        print("-2a-")
-        print(key)
-
-        if key not in sums_state or key == "Timestamp":
-            print("-2b-")
-            sums_state[key] = 1#row[key]
-        else:
-            print("-2c-")
-            sums_state[key] += 1#row[key]
-        
         if key == "Timestamp":
-            sums_state[key] = row[key]
+            continue
 
-        print("-2d-")
-        print(row[key])
-        row[key] = sums_state[key]
-    
-    print("-3-")
-    print(sums_state)
+        # Update counts for 1 minute
+        counts_1min[key] = counts_1min.get(key, 0) + 1
+        for k, v in list(counts_1min.items()):
+            timestamp = datetime.fromtimestamp(v)
+            if current_time - timestamp > timedelta(minutes=1):
+                del counts_1min[k]
 
-    state.set('counts', sums_state)
-    #time.sleep(0.3)
+        # Update counts for 15 minutes
+        counts_15min[key] = counts_15min.get(key, 0) + 1
+        for k, v in list(counts_15min.items()):
+            timestamp = datetime.fromtimestamp(v)
+            if current_time - timestamp > timedelta(minutes=15):
+                del counts_15min[k]
+
+    state.set('counts_1min', counts_1min)
+    state.set('counts_15min', counts_15min)
+
+    print("--")
+    print(counts_1min)
+    print("--")
+    print(counts_15min)
+    print("--")
 
     return row
-    #return sums_state
+
+# def sum_keywords(row: dict, state: State):
+#     global clear_state
+
+
+#     print("-1-")
+#     print(row)
+
+#     if clear_state:
+#         state.set("counts", {})
+#         clear_state = False
+
+#     sums_state = state.get("counts", {})
+    
+#     print("-2-")
+#     print(sums_state)
+
+#     for key in row:
+#         print("-2a-")
+#         print(key)
+
+#         if key not in sums_state or key == "Timestamp":
+#             print("-2b-")
+#             sums_state[key] = 1#row[key]
+#         else:
+#             print("-2c-")
+#             sums_state[key] += 1#row[key]
+        
+#         if key == "Timestamp":
+#             sums_state[key] = row[key]
+
+#         print("-2d-")
+#         print(row[key])
+#         row[key] = sums_state[key]
+    
+#     print("-3-")
+#     print(sums_state)
+
+#     state.set('counts', sums_state)
+#     #time.sleep(0.3)
+
+#     return row
+#     #return sums_state
 
 
 def sdf_way():
