@@ -98,7 +98,7 @@ def expand_keywords(row: dict):
 
     # we need the timestamp, otherwise we could use sdf's expand function
     new_rows['Timestamp'] = row['Timestamp']
-
+    print(new_rows)
     return new_rows
 
 
@@ -123,7 +123,7 @@ def sdf_way():
 
     # parse extracted keyword column (change string to dict)
 
-    sdf = sdf.update(lambda row: print(row))
+    #sdf = sdf.update(lambda row: print(row))
 
     # condider using....
     # Convert the string to a dictionary
