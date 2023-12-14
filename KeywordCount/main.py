@@ -33,7 +33,7 @@ def sum_keywords(row: dict, state: State):
     if clear_state:
         print("Initializing state")
 
-        state.set("counts", {"one_minute_data": {}})
+        state.set("counts", {"one_minute_data": {}, "15_minute_data": {}})
         state.set("window_start", datetime.fromtimestamp(row['Timestamp'] / 1e9).isoformat())
         clear_state = False
 
