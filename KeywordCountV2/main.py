@@ -5,6 +5,7 @@ from collections import defaultdict
 from datetime import datetime, timedelta
 import ast
 import signal
+import traceback
 
 
 client = qx.QuixStreamingClient()
@@ -44,7 +45,8 @@ def on_dataframe_received_handler(stream_consumer: qx.StreamConsumer, df: pd.Dat
             #stream_producer = topic_producer.get_or_create_stream(stream_id = stream_consumer.stream_id)
             #stream_producer.timeseries.buffer.publish(df)
         except Exception as e:
-            print(f"An error occurred: {e}")
+            print("An error occurred:")
+            traceback.print_exc()
             print("Disconnecting dataframe handler and stopping app to prevent data loss..")
         
             stream_consumer.events.on_data_received = None
