@@ -18,8 +18,12 @@ def expand_keywords(row: dict):
 
 
 def sum_keywords(row: dict, state: State, some_param):
+
+
+    state_key = "counts_2"
+
     # Initialize state if it doesn't exist
-    counts = state.get("counts", {
+    counts = state.get(state_key, {
         "1min": {},
         "15min": {},
         "60min": {}
@@ -57,7 +61,7 @@ def sum_keywords(row: dict, state: State, some_param):
     # Debug print
     print({window: counts[window][str(current_timestamp.timestamp())] for window in counts}) 
 
-    state.set("counts", counts)
+    state.set(state_key, counts)
     return {window: counts[window][str(current_timestamp.timestamp())] for window in counts}
 
 def sdf_way():
