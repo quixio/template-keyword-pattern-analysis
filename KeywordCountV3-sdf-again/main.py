@@ -13,6 +13,8 @@ input_topic = app.topic(os.environ["input"], value_deserializer=QuixDeserializer
 output_topic = app.topic(os.environ["output"], value_serializer=JSONSerializer())
 
 
+
+
 def sum_keywords_tumbling(row: dict, state: State, some_param):
     state_key = "counts_tumbling_v2"  # State key variable
 
@@ -52,10 +54,14 @@ def sum_keywords_tumbling(row: dict, state: State, some_param):
                     if window_start_str not in ended_windows:
                         ended_windows[window_start_str] = {}
                     ended_windows[window_start_str][keyword] = sum(window_counts[keyword].values())
-                    window_counts[keyword] = {}
+                    # Reset the counts for the keyword in the current window
+                    counts[window_start_str][keyword] = {}
 
     state.set(state_key, counts)
     return json.dumps(ended_windows)  # Return ended windows as JSON
+
+
+
 
 
 def expand_keywords(row: dict):
