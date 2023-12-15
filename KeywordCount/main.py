@@ -67,8 +67,6 @@ def sum_keywords(row: dict, state: State):
     return_data = time_delta_check(counts, "one_minute_data", state, current_time, window_start, 60)
     #return_data = time_delta_check(counts, "15_minute_data", state, current_time, window_start, 900)
 
-
-
     return return_data
 
 def sdf_way():
