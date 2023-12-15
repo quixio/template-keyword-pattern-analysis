@@ -24,7 +24,7 @@ def on_dataframe_received_handler(stream_consumer: qx.StreamConsumer, df: pd.Dat
         try:
             # Extract keywords and timestamp from the DataFrame
             keywords = ast.literal_eval(df['extracted_keywords'][0])
-            print(df['Timestamp'])
+            print(df.columns)
             timestamp = pd.to_datetime(df['Timestamp'][0], unit='ns')
 
             # Update keyword counts and timestamps
