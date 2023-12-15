@@ -18,7 +18,7 @@ def expand_keywords(row: dict):
 
 
 def sum_keywords(row: dict, state: State, some_param):
-    state_key = "counts_v2"  # State key variable
+    state_key = "counts_v3"  # State key variable
 
     # Initialize state if it doesn't exist
     counts = state.get(state_key, {
