@@ -58,7 +58,7 @@ deployments:
   - name: KeywordCountV3-sdf-again
     application: KeywordCountV3-sdf-again
     deploymentType: Service
-    version: 70b11c8f24502da3cd2a69638c6217efafd490dc
+    version: cd0fc3384261065140f29820ee9dd2d43dca5a2e
     resources:
       cpu: 8000
       memory: 16384
