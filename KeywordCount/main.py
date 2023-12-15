@@ -17,7 +17,7 @@ def expand_keywords(row: dict):
     return new_rows
 
 def sum_keywords(row: dict, state: State, some_param):
-
+    print(row)
     return row
 
 def sdf_way():
