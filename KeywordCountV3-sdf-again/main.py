@@ -18,7 +18,7 @@ def expand_keywords(row: dict):
 
 
 def sum_keywords(row: dict, state: State, some_param):
-    state_key = "counts_v3"  # State key variable
+    state_key = "counts_v2"  # State key variable
 
     # Initialize state if it doesn't exist
     counts = state.get(state_key, {
@@ -63,11 +63,16 @@ def sum_keywords(row: dict, state: State, some_param):
                     window_counts[keyword][str(current_timestamp.timestamp())] = 0
                 window_counts[keyword][str(current_timestamp.timestamp())] += 1
 
+                print(f"Updated counts for keyword {keyword} in window {window}: {window_counts[keyword]}")  # Debug print
+
     # Debug print
     print({window: {keyword: sum(times.values()) for keyword, times in counts[window].items()} for window in counts}) 
 
     state.set(state_key, counts)
     return {window: {keyword: sum(times.values()) for keyword, times in counts[window].items()} for window in counts}
+
+
+
 def sdf_way():
     sdf = app.dataframe(input_topic)
     sdf = sdf[sdf.contains('extracted_keywords')]
