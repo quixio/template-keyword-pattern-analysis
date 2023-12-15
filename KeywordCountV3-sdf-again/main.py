@@ -63,7 +63,7 @@ def sum_keywords(row: dict, state: State, some_param):
                     window_counts[keyword][str(current_timestamp.timestamp())] = 0
                 window_counts[keyword][str(current_timestamp.timestamp())] += 1
 
-                print(f"Updated counts for keyword {keyword} in window {window}: {window_counts[keyword]}")  # Debug print
+                #print(f"Updated counts for keyword {keyword} in window {window}: {window_counts[keyword]}")  # Debug print
 
     # Debug print
     print({window: {keyword: sum(times.values()) for keyword, times in counts[window].items()} for window in counts}) 
