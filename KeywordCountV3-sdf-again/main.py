@@ -1,24 +1,8 @@
-from quixstreams import Application, State
-from quixstreams.models.serializers.quix import QuixDeserializer, QuixTimeseriesSerializer, JSONSerializer
-import os
-import time
-import ast
 from datetime import datetime, timedelta
-from quixstreams.kafka import Producer
+import json
 
-
-app = Application.Quix("keywords-10", auto_offset_reset="earliest")
-input_topic = app.topic(os.environ["input"], value_deserializer=QuixDeserializer())
-output_topic = app.topic(os.environ["output"], value_serializer=JSONSerializer())
-
-def expand_keywords(row: dict):
-    new_rows = row['extracted_keywords']
-    new_rows['Timestamp'] = row['Timestamp']
-    return new_rows
-
-
-def sum_keywords(row: dict, state: State, some_param):
-    state_key = "counts_v101"  # State key variable
+def sum_keywords_tumbling(row: dict, state: State, some_param):
+    state_key = "counts_tumbling_v2"  # State key variable
 
     # Initialize state if it doesn't exist
     counts = state.get(state_key, {
@@ -29,6 +13,8 @@ def sum_keywords(row: dict, state: State, some_param):
         "8hr": {},
         "24hr": {}
     })
+
+    ended_windows = {}  # Store ended windows
 
     # Get current timestamp
     current_timestamp = datetime.fromtimestamp(row['Timestamp'] / 1e9)
@@ -53,13 +39,13 @@ def sum_keywords(row: dict, state: State, some_param):
                 elif window == "24hr":
                     window_start = current_timestamp - timedelta(hours=24)
 
-                # Remove counts outside of window
-                if keyword in window_counts:
-                    timestamps_to_remove = [ts for ts in window_counts[keyword] if datetime.fromtimestamp(float(ts)) < window_start]
-                    for ts in timestamps_to_remove:
-                        del window_counts[keyword][ts]
-                    if not window_counts[keyword]:
-                        del window_counts[keyword]
+                # Reset counts at the end of each window
+                if keyword in window_counts and datetime.fromtimestamp(float(max(window_counts[keyword].keys()))) < window_start:
+                    print(f"End of {window} window for keyword {keyword}: {window_counts[keyword]}")  # Debug print
+                    if window not in ended_windows:
+                        ended_windows[window] = {}
+                    ended_windows[window][str(window_start.timestamp())] = sum(window_counts[keyword].values())
+                    window_counts[keyword] = {}
 
                 # Add new count
                 if keyword not in window_counts:
@@ -74,21 +60,4 @@ def sum_keywords(row: dict, state: State, some_param):
     print({window: {keyword: sum(times.values()) for keyword, times in counts[window].items()} for window in counts}) 
 
     state.set(state_key, counts)
-    return {window: {keyword: sum(times.values()) for keyword, times in counts[window].items()} for window in counts}
-
-
-def sdf_way():
-    sdf = app.dataframe(input_topic)
-    sdf = sdf[sdf.contains('extracted_keywords')]
-    sdf = sdf[sdf['extracted_keywords'].notnull()]
-    sdf['extracted_keywords'] = sdf['extracted_keywords'].apply(lambda value: dict(ast.literal_eval(value)))
-    sdf = sdf.apply(expand_keywords)
-    #sdf = sdf.apply(sum_keywords, stateful=True)
-    sdf = sdf.apply(lambda row, state: sum_keywords(row, state, "thing"), stateful=True)
-    sdf = sdf.to_topic(output_topic)
-    return sdf
-
-sdf = sdf_way()
-
-if __name__ == "__main__":
-    app.run(sdf)
+    return json.dumps(ended_windows)  # Return ended windows as JSON
