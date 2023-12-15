@@ -18,13 +18,16 @@ def expand_keywords(row: dict):
 
 
 def sum_keywords(row: dict, state: State, some_param):
-    state_key = "counts_v7"  # State key variable
+    state_key = "counts_v22"  # State key variable
 
     # Initialize state if it doesn't exist
     counts = state.get(state_key, {
         "1min": {},
         "15min": {},
-        "60min": {}
+        "60min": {},
+        "4hr": {},
+        "8hr": {},
+        "24hr": {}
     })
 
     # Get current timestamp
@@ -42,7 +45,13 @@ def sum_keywords(row: dict, state: State, some_param):
                 elif window == "15min":
                     window_start = current_timestamp - timedelta(minutes=15)
                 elif window == "60min":
-                    window_start = current_timestamp - timedelta(minutes=60)
+                    window_start = current_timestamp - timedelta(hours=1)
+                elif window == "4hr":
+                    window_start = current_timestamp - timedelta(hours=4)
+                elif window == "8hr":
+                    window_start = current_timestamp - timedelta(hours=8)
+                elif window == "24hr":
+                    window_start = current_timestamp - timedelta(hours=24)
 
                 # Remove counts outside of window
                 if keyword in window_counts:
@@ -63,10 +72,9 @@ def sum_keywords(row: dict, state: State, some_param):
 
     # Debug print
     print({window: {keyword: sum(times.values()) for keyword, times in counts[window].items()} for window in counts}) 
-    time.sleep(2)
+
     state.set(state_key, counts)
     return {window: {keyword: sum(times.values()) for keyword, times in counts[window].items()} for window in counts}
-
 
 
 def sdf_way():
