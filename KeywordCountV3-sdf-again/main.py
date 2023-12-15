@@ -18,7 +18,7 @@ def expand_keywords(row: dict):
 
 
 def sum_keywords(row: dict, state: State, some_param):
-    state_key = "counts_v5"  # State key variable
+    state_key = "counts_v2"  # State key variable
 
     # Initialize state if it doesn't exist
     counts = state.get(state_key, {
@@ -34,7 +34,8 @@ def sum_keywords(row: dict, state: State, some_param):
     for keyword, _ in row.items():
         if keyword != 'Timestamp':
             print(f"Processing keyword: {keyword}")  # Debug print
-            for window, window_counts in counts.items():
+            for window in counts.keys():
+                window_counts = counts[window]
                 # Calculate window start time
                 if window == "1min":
                     window_start = current_timestamp - timedelta(minutes=1)
@@ -44,17 +45,12 @@ def sum_keywords(row: dict, state: State, some_param):
                     window_start = current_timestamp - timedelta(minutes=60)
 
                 # Remove counts outside of window
-                keys_to_remove = []
-                for keyword in window_counts.keys():
-                    keyword_counts = window_counts[keyword]
-                    timestamps_to_remove = [ts for ts in keyword_counts if datetime.fromtimestamp(float(ts)) < window_start]
+                if keyword in window_counts:
+                    timestamps_to_remove = [ts for ts in window_counts[keyword] if datetime.fromtimestamp(float(ts)) < window_start]
                     for ts in timestamps_to_remove:
-                        del keyword_counts[ts]
-                    if not keyword_counts:
-                        keys_to_remove.append(keyword)
-
-                for key in keys_to_remove:
-                    del window_counts[key]
+                        del window_counts[keyword][ts]
+                    if not window_counts[keyword]:
+                        del window_counts[keyword]
 
                 # Add new count
                 if keyword not in window_counts:
@@ -68,7 +64,6 @@ def sum_keywords(row: dict, state: State, some_param):
     # Debug print
     print({window: {keyword: sum(times.values()) for keyword, times in counts[window].items()} for window in counts}) 
 
-    time.sleep(1)
     state.set(state_key, counts)
     return {window: {keyword: sum(times.values()) for keyword, times in counts[window].items()} for window in counts}
 
