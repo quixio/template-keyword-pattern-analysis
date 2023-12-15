@@ -7,7 +7,7 @@ from datetime import datetime, timedelta
 from quixstreams.kafka import Producer
 
 
-app = Application.Quix("keywords-3", auto_offset_reset="earliest")
+app = Application.Quix("keywords-10", auto_offset_reset="earliest")
 input_topic = app.topic(os.environ["input"], value_deserializer=QuixDeserializer())
 output_topic = app.topic(os.environ["output"], value_serializer=JSONSerializer())
 
@@ -18,7 +18,7 @@ def expand_keywords(row: dict):
 
 
 def sum_keywords(row: dict, state: State, some_param):
-    state_key = "counts_v22"  # State key variable
+    state_key = "counts_v101"  # State key variable
 
     # Initialize state if it doesn't exist
     counts = state.get(state_key, {
