@@ -27,7 +27,7 @@ def sum_keywords_tumbling(row: dict, state: State, some_param):
     # Update counts
     for keyword, _ in row.items():
         if keyword != 'Timestamp':
-            print(f"Processing keyword: {keyword}")  # Debug print
+            #print(f"Processing keyword: {keyword}")  # Debug print
             for window_length in ["1min", "15min", "60min", "4hr", "8hr", "24hr"]:
                 # Calculate window start time
                 if window_length == "1min":
@@ -65,10 +65,10 @@ def sum_keywords_tumbling(row: dict, state: State, some_param):
                     window_counts[keyword][str(current_timestamp.timestamp())] = 0
                 window_counts[keyword][str(current_timestamp.timestamp())] += 1
 
-                print(f"Updated counts for keyword {keyword} in window starting at {window_start_str}: {window_counts[keyword]}")  # Debug print
+                #print(f"Updated counts for keyword {keyword} in window starting at {window_start_str}: {window_counts[keyword]}")  # Debug print
 
     # Debug print
-    print({window_start: {keyword: sum(times.values()) for keyword, times in counts[window_start].items()} for window_start in counts}) 
+    #print({window_start: {keyword: sum(times.values()) for keyword, times in counts[window_start].items()} for window_start in counts}) 
 
     state.set(state_key, counts)
     return json.dumps(ended_windows)  # Return ended windows as JSON
