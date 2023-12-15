@@ -27,10 +27,11 @@ def sum_keywords_tumbling(row: dict, state: State, some_param):
     # Update counts
     for keyword, _ in row.items():
         if keyword != 'Timestamp':
-            #print(f"Processing keyword: {keyword}")  # Debug print
             for window_length in [1]:  # Window lengths in minutes
-                # Calculate window start time
-                window_start = current_timestamp - timedelta(minutes=window_length)
+                # Calculate window start time by rounding down to the nearest window_length
+                window_start = current_timestamp - timedelta(minutes=current_timestamp.minute % window_length, 
+                                                            seconds=current_timestamp.second, 
+                                                            microseconds=current_timestamp.microsecond)
 
                 window_start_str = str(window_start.timestamp())
 
@@ -38,14 +39,6 @@ def sum_keywords_tumbling(row: dict, state: State, some_param):
                     counts[window_start_str] = {}
 
                 window_counts = counts[window_start_str]
-
-                # Reset counts at the end of each window
-                if keyword in window_counts and datetime.fromtimestamp(float(max(window_counts[keyword].keys()))) < window_start:
-                    print(f"End of window starting at {window_start_str} for keyword {keyword}: {window_counts[keyword]}")  # Debug print
-                    if window_start_str not in ended_windows:
-                        ended_windows[window_start_str] = {}
-                    ended_windows[window_start_str][keyword] = sum(window_counts[keyword].values())
-                    window_counts[keyword] = {}
 
                 # Add new count
                 if keyword not in window_counts:
