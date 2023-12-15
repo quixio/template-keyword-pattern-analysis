@@ -55,6 +55,29 @@ deployments:
         description: Name of the output topic to write to.
         required: false
         value: counts
+  - name: KeywordCountV3-sdf-again
+    application: KeywordCountV3-sdf-again
+    deploymentType: Service
+    version: 70b11c8f24502da3cd2a69638c6217efafd490dc
+    resources:
+      cpu: 8000
+      memory: 16384
+      replicas: 1
+    state:
+      enabled: true
+      size: 10
+    desiredStatus: Running
+    variables:
+      - name: input
+        inputType: InputTopic
+        description: Name of the input topic to listen to.
+        required: false
+        value: csv-data
+      - name: output
+        inputType: OutputTopic
+        description: Name of the output topic to write to.
+        required: false
+        value: transform
 
 # This section describes the Topics of the data pipeline
 topics:
