@@ -17,7 +17,7 @@ keyword_counts = defaultdict(lambda: defaultdict(list))
 
 def on_dataframe_received_handler(stream_consumer: qx.StreamConsumer, df: pd.DataFrame):
     
-    print(df)
+    print(df.columns)
     try:
         # Extract keywords and timestamp from the DataFrame
         keywords = ast.literal_eval(df['StringValues']['extracted_keywords'][0])
