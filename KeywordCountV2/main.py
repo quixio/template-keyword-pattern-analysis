@@ -42,7 +42,10 @@ def on_dataframe_received_handler(stream_consumer: qx.StreamConsumer, df: pd.Dat
         #stream_producer.timeseries.buffer.publish(df)
     except Exception as e:
         print(f"An error occurred: {e}")
-        print("Stopping app to prevent data loss..")
+        print("Disconnecting dataframe handler and stopping app to prevent data loss..")
+    
+        stream_consumer.events.on_data_received = None
+        stream_consumer.timeseries.on_dataframe_received = None
         os.kill(os.getpid(), signal.SIGTERM)
         
 
