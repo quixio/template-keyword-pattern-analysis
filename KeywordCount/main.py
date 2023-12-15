@@ -18,12 +18,11 @@ def expand_keywords(row: dict):
 
 def sum_keywords(row: dict, state: State, some_param):
     # Initialize state if it doesn't exist
-    if not state.exists("counts"):
-        state["counts"] = {
-            "1min": {},
-            "15min": {},
-            "60min": {}
-        }
+    counts = state.get("counts", {
+        "1min": {},
+        "15min": {},
+        "60min": {}
+    })
 
     # Get current timestamp
     current_timestamp = datetime.fromtimestamp(row['Timestamp'] / 1e9)
@@ -31,7 +30,7 @@ def sum_keywords(row: dict, state: State, some_param):
     # Update counts
     for keyword, count in row.items():
         if keyword != 'Timestamp':
-            for window, counts in state["counts"].items():
+            for window, window_counts in counts.items():
                 # Calculate window start time
                 if window == "1min":
                     window_start = current_timestamp - timedelta(minutes=1)
@@ -42,22 +41,23 @@ def sum_keywords(row: dict, state: State, some_param):
 
                 # Remove counts outside of window
                 keys_to_remove = []
-                for timestamp, keyword_counts in counts.items():
-                    if timestamp < window_start:
+                for timestamp, keyword_counts in window_counts.items():
+                    if datetime.fromtimestamp(timestamp) < window_start:
                         keys_to_remove.append(timestamp)
 
                 for key in keys_to_remove:
-                    del counts[key]
+                    del window_counts[key]
 
                 # Add new count
-                if current_timestamp not in counts:
-                    counts[current_timestamp] = {}
-                if keyword not in counts[current_timestamp]:
-                    counts[current_timestamp][keyword] = 0
-                counts[current_timestamp][keyword] += count
+                if current_timestamp.timestamp() not in window_counts:
+                    window_counts[current_timestamp.timestamp()] = {}
+                if keyword not in window_counts[current_timestamp.timestamp()]:
+                    window_counts[current_timestamp.timestamp()][keyword] = 0
+                window_counts[current_timestamp.timestamp()][keyword] += count
 
-    print(state["counts"])  # Debug print
-    return state["counts"]
+    print(counts)  # Debug print
+    state.set("counts", counts)
+    return counts
 
 def sdf_way():
     sdf = app.dataframe(input_topic)
