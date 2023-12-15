@@ -16,11 +16,9 @@ def expand_keywords(row: dict):
     new_rows['Timestamp'] = row['Timestamp']
     return new_rows
 
-
 def sum_keywords(row: dict, state: State, some_param):
 
-
-    state_key = "counts_2"
+    state_key = "counts_v2"
 
     # Initialize state if it doesn't exist
     counts = state.get(state_key, {
@@ -46,23 +44,29 @@ def sum_keywords(row: dict, state: State, some_param):
 
                 # Remove counts outside of window
                 keys_to_remove = []
-                for timestamp_str, keyword_counts in window_counts.items():
-                    if datetime.fromtimestamp(float(timestamp_str)) < window_start:
-                        keys_to_remove.append(timestamp_str)
+                for keyword in window_counts.keys():
+                    keyword_counts = window_counts[keyword]
+                    timestamps_to_remove = [ts for ts in keyword_counts if datetime.fromtimestamp(float(ts)) < window_start]
+                    for ts in timestamps_to_remove:
+                        del keyword_counts[ts]
+                    if not keyword_counts:
+                        keys_to_remove.append(keyword)
 
                 for key in keys_to_remove:
                     del window_counts[key]
 
                 # Add new count
                 if keyword not in window_counts:
-                    window_counts[keyword] = 0
-                window_counts[keyword] += 1
+                    window_counts[keyword] = {}
+                if str(current_timestamp.timestamp()) not in window_counts[keyword]:
+                    window_counts[keyword][str(current_timestamp.timestamp())] = 0
+                window_counts[keyword][str(current_timestamp.timestamp())] += 1
 
     # Debug print
-    print({window: counts[window][str(current_timestamp.timestamp())] for window in counts}) 
+    print({window: {keyword: sum(times.values()) for keyword, times in counts[window].items()} for window in counts}) 
 
     state.set(state_key, counts)
-    return {window: counts[window][str(current_timestamp.timestamp())] for window in counts}
+    return {window: {keyword: sum(times.values()) for keyword, times in counts[window].items()} for window in counts}
 
 def sdf_way():
     sdf = app.dataframe(input_topic)
