@@ -29,7 +29,7 @@ def sum_keywords(row: dict, state: State, some_param):
     current_timestamp = datetime.fromtimestamp(row['Timestamp'] / 1e9)
 
     # Update counts
-    for keyword, count in row.items():
+    for keyword, _ in row.items():
         if keyword != 'Timestamp':
             for window, window_counts in counts.items():
                 # Calculate window start time
@@ -50,16 +50,15 @@ def sum_keywords(row: dict, state: State, some_param):
                     del window_counts[key]
 
                 # Add new count
-                timestamp_str = str(current_timestamp.timestamp())
-                if timestamp_str not in window_counts:
-                    window_counts[timestamp_str] = {}
-                if keyword not in window_counts[timestamp_str]:
-                    window_counts[timestamp_str][keyword] = 0
-                window_counts[timestamp_str][keyword] += count
+                if keyword not in window_counts:
+                    window_counts[keyword] = 0
+                window_counts[keyword] += 1
 
-    print(counts)  # Debug print
+    # Debug print
+    print({window: counts[window][str(current_timestamp.timestamp())] for window in counts}) 
+
     state.set("counts", counts)
-    return counts
+    return {window: counts[window][str(current_timestamp.timestamp())] for window in counts}
 
 def sdf_way():
     sdf = app.dataframe(input_topic)
