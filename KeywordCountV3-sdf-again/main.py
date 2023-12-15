@@ -26,6 +26,7 @@ def sum_keywords_tumbling(row: dict, state: State, some_param):
 
     # Update counts
     for keyword, _ in row.items():
+        print(keyword)
         if keyword != 'Timestamp':
             #print(f"Processing keyword: {keyword}")  # Debug print
             for window_length in ["1min", "15min", "60min", "4hr", "8hr", "24hr"]:
