@@ -2,17 +2,10 @@ from datetime import datetime, timedelta
 import json
 
 def sum_keywords_tumbling(row: dict, state: State, some_param):
-    state_key = "counts_tumbling_v2"  # State key variable
+    state_key = "counts_tumbling_v200"  # State key variable
 
     # Initialize state if it doesn't exist
-    counts = state.get(state_key, {
-        "1min": {},
-        "15min": {},
-        "60min": {},
-        "4hr": {},
-        "8hr": {},
-        "24hr": {}
-    })
+    counts = state.get(state_key, {})
 
     ended_windows = {}  # Store ended windows
 
@@ -23,28 +16,34 @@ def sum_keywords_tumbling(row: dict, state: State, some_param):
     for keyword, _ in row.items():
         if keyword != 'Timestamp':
             print(f"Processing keyword: {keyword}")  # Debug print
-            for window in counts.keys():
-                window_counts = counts[window]
+            for window_length in ["1min", "15min", "60min", "4hr", "8hr", "24hr"]:
                 # Calculate window start time
-                if window == "1min":
+                if window_length == "1min":
                     window_start = current_timestamp - timedelta(minutes=1)
-                elif window == "15min":
+                elif window_length == "15min":
                     window_start = current_timestamp - timedelta(minutes=15)
-                elif window == "60min":
+                elif window_length == "60min":
                     window_start = current_timestamp - timedelta(hours=1)
-                elif window == "4hr":
+                elif window_length == "4hr":
                     window_start = current_timestamp - timedelta(hours=4)
-                elif window == "8hr":
+                elif window_length == "8hr":
                     window_start = current_timestamp - timedelta(hours=8)
-                elif window == "24hr":
+                elif window_length == "24hr":
                     window_start = current_timestamp - timedelta(hours=24)
+
+                window_start_str = str(window_start.timestamp())
+
+                if window_start_str not in counts:
+                    counts[window_start_str] = {}
+
+                window_counts = counts[window_start_str]
 
                 # Reset counts at the end of each window
                 if keyword in window_counts and datetime.fromtimestamp(float(max(window_counts[keyword].keys()))) < window_start:
-                    print(f"End of {window} window for keyword {keyword}: {window_counts[keyword]}")  # Debug print
-                    if window not in ended_windows:
-                        ended_windows[window] = {}
-                    ended_windows[window][str(window_start.timestamp())] = sum(window_counts[keyword].values())
+                    print(f"End of window starting at {window_start_str} for keyword {keyword}: {window_counts[keyword]}")  # Debug print
+                    if window_start_str not in ended_windows:
+                        ended_windows[window_start_str] = {}
+                    ended_windows[window_start_str][keyword] = sum(window_counts[keyword].values())
                     window_counts[keyword] = {}
 
                 # Add new count
@@ -54,10 +53,10 @@ def sum_keywords_tumbling(row: dict, state: State, some_param):
                     window_counts[keyword][str(current_timestamp.timestamp())] = 0
                 window_counts[keyword][str(current_timestamp.timestamp())] += 1
 
-                print(f"Updated counts for keyword {keyword} in window {window}: {window_counts[keyword]}")  # Debug print
+                print(f"Updated counts for keyword {keyword} in window starting at {window_start_str}: {window_counts[keyword]}")  # Debug print
 
     # Debug print
-    print({window: {keyword: sum(times.values()) for keyword, times in counts[window].items()} for window in counts}) 
+    print({window_start: {keyword: sum(times.values()) for keyword, times in counts[window_start].items()} for window_start in counts}) 
 
     state.set(state_key, counts)
     return json.dumps(ended_windows)  # Return ended windows as JSON
