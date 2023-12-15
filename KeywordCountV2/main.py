@@ -47,6 +47,8 @@ def on_dataframe_received_handler(stream_consumer: qx.StreamConsumer, df: pd.Dat
         except Exception as e:
             print("An error occurred:")
             traceback.print_exc()
+            print(" ")
+            print("-----------------------------------------------------------------------")
             print("Disconnecting dataframe handler and stopping app to prevent data loss..")
         
             stream_consumer.events.on_data_received = None
