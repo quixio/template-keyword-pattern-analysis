@@ -16,9 +16,9 @@ def expand_keywords(row: dict):
     new_rows['Timestamp'] = row['Timestamp']
     return new_rows
 
-def sum_keywords(row: dict, state: State, some_param):
 
-    state_key = "counts_v2"
+def sum_keywords(row: dict, state: State, some_param):
+    state_key = "counts_v2"  # State key variable
 
     # Initialize state if it doesn't exist
     counts = state.get(state_key, {
@@ -33,6 +33,7 @@ def sum_keywords(row: dict, state: State, some_param):
     # Update counts
     for keyword, _ in row.items():
         if keyword != 'Timestamp':
+            print(f"Processing keyword: {keyword}")  # Debug print
             for window, window_counts in counts.items():
                 # Calculate window start time
                 if window == "1min":
@@ -67,7 +68,6 @@ def sum_keywords(row: dict, state: State, some_param):
 
     state.set(state_key, counts)
     return {window: {keyword: sum(times.values()) for keyword, times in counts[window].items()} for window in counts}
-
 def sdf_way():
     sdf = app.dataframe(input_topic)
     sdf = sdf[sdf.contains('extracted_keywords')]
