@@ -26,23 +26,11 @@ def sum_keywords_tumbling(row: dict, state: State, some_param):
 
     # Update counts
     for keyword, _ in row.items():
-        #print(keyword)
         if keyword != 'Timestamp':
             #print(f"Processing keyword: {keyword}")  # Debug print
-            for window_length in ["1min", "15min", "60min", "4hr", "8hr", "24hr"]:
+            for window_length in [1, 15, 60, 4*60, 8*60, 24*60]:  # Window lengths in minutes
                 # Calculate window start time
-                if window_length == "1min":
-                    window_start = current_timestamp - timedelta(minutes=1)
-                elif window_length == "15min":
-                    window_start = current_timestamp - timedelta(minutes=15)
-                elif window_length == "60min":
-                    window_start = current_timestamp - timedelta(hours=1)
-                elif window_length == "4hr":
-                    window_start = current_timestamp - timedelta(hours=4)
-                elif window_length == "8hr":
-                    window_start = current_timestamp - timedelta(hours=8)
-                elif window_length == "24hr":
-                    window_start = current_timestamp - timedelta(hours=24)
+                window_start = current_timestamp - timedelta(minutes=window_length)
 
                 window_start_str = str(window_start.timestamp())
 
@@ -62,9 +50,7 @@ def sum_keywords_tumbling(row: dict, state: State, some_param):
                 # Add new count
                 if keyword not in window_counts:
                     window_counts[keyword] = {}
-                if str(current_timestamp.timestamp()) not in window_counts[keyword]:
-                    window_counts[keyword][str(current_timestamp.timestamp())] = 0
-                window_counts[keyword][str(current_timestamp.timestamp())] += 1
+                window_counts[keyword][str(current_timestamp.timestamp())] = window_counts[keyword].get(str(current_timestamp.timestamp()), 0) + 1
 
                 print(f"Updated counts for keyword {keyword} in window ({window_length}) starting at {window_start_str}: {window_counts[keyword]}")  # Debug print
 
