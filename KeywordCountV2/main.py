@@ -17,7 +17,7 @@ keyword_counts = defaultdict(lambda: defaultdict(list))
 
 def on_dataframe_received_handler(stream_consumer: qx.StreamConsumer, df: pd.DataFrame):
     if 'StringValues' in df and 'extracted_keywords' in df['StringValues']:
-        print("!!!!!!!!!string values")
+        print("!!!!!!!!! string values")
         print(df.columns)
     else:
         print("no string values")
