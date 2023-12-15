@@ -14,9 +14,8 @@ output_topic = app.topic(os.environ["output"], value_serializer=JSONSerializer()
 
 
 
-
 def sum_keywords_tumbling(row: dict, state: State, some_param):
-    state_key = "counts_tumbling_v2202"  # State key variable
+    state_key = "counts_tumbling_v2"  # State key variable
 
     # Initialize state if it doesn't exist
     counts = state.get(state_key, {})
@@ -48,7 +47,7 @@ def sum_keywords_tumbling(row: dict, state: State, some_param):
                 window_counts[keyword][str(current_timestamp.timestamp())] = window_counts[keyword].get(str(current_timestamp.timestamp()), 0) + 1
 
                 # Check if the window has ended
-                if keyword in window_counts and datetime.fromtimestamp(float(max(window_counts[keyword].keys()))) < window_start + timedelta(minutes=window_length):
+                if keyword in window_counts and datetime.fromtimestamp(float(max(window_counts[keyword].keys()))) >= window_start + timedelta(minutes=window_length):
                     # Print a message when a window ends
                     print(f"Window ended at {window_start_str}")
                     if window_start_str not in ended_windows:
@@ -59,7 +58,6 @@ def sum_keywords_tumbling(row: dict, state: State, some_param):
 
     state.set(state_key, counts)
     return json.dumps(ended_windows)  # Return ended windows as JSON
-
 
 
 
