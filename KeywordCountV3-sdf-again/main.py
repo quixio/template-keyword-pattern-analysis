@@ -68,6 +68,7 @@ def sum_keywords(row: dict, state: State, some_param):
     # Debug print
     print({window: {keyword: sum(times.values()) for keyword, times in counts[window].items()} for window in counts}) 
 
+    time.sleep(1)
     state.set(state_key, counts)
     return {window: {keyword: sum(times.values()) for keyword, times in counts[window].items()} for window in counts}
 
