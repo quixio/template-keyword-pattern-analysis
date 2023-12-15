@@ -6,6 +6,7 @@ import ast
 from datetime import datetime, timedelta
 from quixstreams.kafka import Producer
 
+
 app = Application.Quix("keywords-3", auto_offset_reset="earliest")
 input_topic = app.topic(os.environ["input"], value_deserializer=QuixDeserializer())
 output_topic = app.topic(os.environ["output"], value_serializer=JSONSerializer())
@@ -30,7 +31,7 @@ def time_delta_check(counts, key, state, current_time, window_start, delta_secon
         return counts
 
 clear_state = True
-def sum_keywords(row: dict, state: State):
+def sum_keywords(row: dict, state: State, a):
     global clear_state
 
     if clear_state:
@@ -75,7 +76,8 @@ def sdf_way():
     sdf = sdf[sdf['extracted_keywords'].notnull()]
     sdf['extracted_keywords'] = sdf['extracted_keywords'].apply(lambda value: dict(ast.literal_eval(value)))
     sdf = sdf.apply(expand_keywords)
-    sdf = sdf.apply(sum_keywords, stateful=True)
+    #sdf = sdf.apply(sum_keywords, stateful=True)
+    sdf = sdf.apply(lambda row, state: sum_keywords(row, state, "thing"), stateful=True)
     sdf = sdf.to_topic(output_topic)
     return sdf
 
