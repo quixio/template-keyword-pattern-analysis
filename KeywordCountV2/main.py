@@ -16,8 +16,13 @@ topic_producer = client.get_topic_producer(os.environ["output"])
 keyword_counts = defaultdict(lambda: defaultdict(list))
 
 def on_dataframe_received_handler(stream_consumer: qx.StreamConsumer, df: pd.DataFrame):
-    
-    print(df.columns)
+    if 'StringValues' in df and 'extracted_keywords' in df['StringValues']:
+        print("!!!!!!!!!string values")
+        print(df.columns)
+    else:
+        print("no string values")
+        print(df.columns)
+    return;
     try:
         # Extract keywords and timestamp from the DataFrame
         keywords = ast.literal_eval(df['StringValues']['extracted_keywords'][0])
