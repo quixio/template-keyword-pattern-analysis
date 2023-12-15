@@ -54,8 +54,8 @@ def sum_keywords_tumbling(row: dict, state: State, some_param):
                     ended_windows[window_start_str][keyword] = sum(window_counts[keyword].values())
                     window_counts[keyword] = {}
 
-                if window_length == 1:    
-                    print(f"Updated counts for keyword {keyword} in window ({window_length}) starting at {window_start_str}: {window_counts[keyword]}")  # Debug print
+                #if window_length == 60:    
+                #    print(f"Updated counts for keyword {keyword} in window ({window_length}) starting at {window_start_str}: {window_counts[keyword]}")  # Debug print
 
     # Debug print
     #print({window_start: {keyword: sum(times.values()) for keyword, times in counts[window_start].items()} for window_start in counts}) 
