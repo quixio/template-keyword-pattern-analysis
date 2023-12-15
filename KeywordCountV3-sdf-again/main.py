@@ -45,6 +45,15 @@ def sum_keywords_tumbling(row: dict, state: State, some_param):
                     window_counts[keyword] = {}
                 window_counts[keyword][str(current_timestamp.timestamp())] = window_counts[keyword].get(str(current_timestamp.timestamp()), 0) + 1
 
+                # Check if the window has ended
+                if keyword in window_counts and datetime.fromtimestamp(float(max(window_counts[keyword].keys()))) < window_start:
+                    # Print a message when a window ends
+                    print(f"Window ended at {window_start_str}")
+                    if window_start_str not in ended_windows:
+                        ended_windows[window_start_str] = {}
+                    ended_windows[window_start_str][keyword] = sum(window_counts[keyword].values())
+                    window_counts[keyword] = {}
+                    
                 #print(f"Updated counts for keyword {keyword} in window ({window_length}) starting at {window_start_str}: {window_counts[keyword]}")  # Debug print
 
     # Debug print
