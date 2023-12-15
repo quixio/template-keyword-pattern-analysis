@@ -18,7 +18,7 @@ def expand_keywords(row: dict):
 
 
 def sum_keywords(row: dict, state: State, some_param):
-    state_key = "counts_v2"  # State key variable
+    state_key = "counts_v7"  # State key variable
 
     # Initialize state if it doesn't exist
     counts = state.get(state_key, {
@@ -63,7 +63,7 @@ def sum_keywords(row: dict, state: State, some_param):
 
     # Debug print
     print({window: {keyword: sum(times.values()) for keyword, times in counts[window].items()} for window in counts}) 
-
+    time.sleep(2)
     state.set(state_key, counts)
     return {window: {keyword: sum(times.values()) for keyword, times in counts[window].items()} for window in counts}
 
