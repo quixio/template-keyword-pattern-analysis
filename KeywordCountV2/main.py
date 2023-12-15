@@ -32,15 +32,19 @@ def on_dataframe_received_handler(stream_consumer: qx.StreamConsumer, df: pd.Dat
                 keyword_counts[keyword]['timestamps'].append(timestamp)
                 #keyword_counts[keyword]['counts'].append(len(keyword_counts[keyword]['timestamps']))
 
-            # Calculate and print keyword counts in the specified time periods
-            for keyword, data in keyword_counts.items():
-                timestamps = data['timestamps']
-                #counts = data['counts']
-
+            # Calculate keyword counts in the specified time periods and store in a DataFrame
+            data = []
+            for keyword, timestamps in keyword_counts.items():
+                row = {'Keyword': keyword}
                 for period in [1, 15, 60]:  # Time periods in minutes
                     period_start = timestamp - timedelta(minutes=period)
                     count = sum(t >= period_start for t in timestamps)
-                    print(f"Count of '{keyword}' in the last {period} minutes: {count}")
+                    row[f'{period}_min_count'] = count
+                data.append(row)
+            count_df = pd.DataFrame(data)
+            #print(count_df)
+            output_stream = topic_producer.get_or_create_stream("a")
+            output_stream.timeseries.publish(count_df)
 
             # Continue with the existing code...
             #stream_producer = topic_producer.get_or_create_stream(stream_id = stream_consumer.stream_id)
