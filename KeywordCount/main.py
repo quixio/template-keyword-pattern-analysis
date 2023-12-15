@@ -16,6 +16,7 @@ def expand_keywords(row: dict):
     new_rows['Timestamp'] = row['Timestamp']
     return new_rows
 
+
 def sum_keywords(row: dict, state: State, some_param):
     # Initialize state if it doesn't exist
     counts = state.get("counts", {
@@ -41,19 +42,20 @@ def sum_keywords(row: dict, state: State, some_param):
 
                 # Remove counts outside of window
                 keys_to_remove = []
-                for timestamp, keyword_counts in window_counts.items():
-                    if datetime.fromtimestamp(timestamp) < window_start:
-                        keys_to_remove.append(timestamp)
+                for timestamp_str, keyword_counts in window_counts.items():
+                    if datetime.fromtimestamp(float(timestamp_str)) < window_start:
+                        keys_to_remove.append(timestamp_str)
 
                 for key in keys_to_remove:
                     del window_counts[key]
 
                 # Add new count
-                if current_timestamp.timestamp() not in window_counts:
-                    window_counts[current_timestamp.timestamp()] = {}
-                if keyword not in window_counts[current_timestamp.timestamp()]:
-                    window_counts[current_timestamp.timestamp()][keyword] = 0
-                window_counts[current_timestamp.timestamp()][keyword] += count
+                timestamp_str = str(current_timestamp.timestamp())
+                if timestamp_str not in window_counts:
+                    window_counts[timestamp_str] = {}
+                if keyword not in window_counts[timestamp_str]:
+                    window_counts[timestamp_str][keyword] = 0
+                window_counts[timestamp_str][keyword] += count
 
     print(counts)  # Debug print
     state.set("counts", counts)
