@@ -22,13 +22,17 @@ stream.timeseries.buffer.time_span_in_milliseconds = 100
 
 print("Sending values for 30 seconds.")
 
-for index in range(0, 3000):
+# "extracted_keywords": [
+#       "[('dashboard latency', 0.6075), ('data', 0.328), ('amplitude tech blog', 0.2962), ('precalculation', 0.287), ('duration', 0.2192)]"
+#     ],
+
+for index in range(0, 3000 * 10000):
     stream.timeseries \
         .buffer \
         .add_timestamp(datetime.datetime.utcnow()) \
-        .add_value("ParameterA", math.sin(index / 200.0) + math.sin(index) / 5.0) \
+        .add_value("extracted_keywords", "database") \
         .publish()
-    time.sleep(0.01)
+    time.sleep(0.5)
 
 print("Closing stream")
 stream.close()
