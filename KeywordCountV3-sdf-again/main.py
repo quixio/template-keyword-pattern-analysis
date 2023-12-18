@@ -31,31 +31,28 @@ def sum_keywords_tumbling(row: dict, state: State, some_param):
         print(f"Setting {previous_window_start_state_key} state to {previous_window_start}")
         state.set(previous_window_start_state_key, previous_window_start)
 
+    window_start = current_timestamp - timedelta(minutes=current_timestamp.minute)
+    print(f"Window start = {previous_window_start}")
+
+    window_start_str = str(window_start.timestamp())
+    #print(window_start.timestamp().strftime('%Y-%m-%d %H:%M:%S'))
+
+    w = datetime.utcfromtimestamp(window_start.timestamp())
+    #print(f"{w} - {keyword}")
+
+    #print(window_start_str.strftime('%Y-%m-%d %H:%M:%S'))
+
+    if window_start_str not in counts:
+        print(f"Adding window {w} to counts")
+        counts[window_start_str] = {}
+
+    window_counts = counts[window_start_str]
+
     # Update counts
     for keyword, _ in row.items():
         if keyword != 'Timestamp' and "database" in keyword:
             for window_length in [1]:  # Window lengths in minutes (, 60, 4*60, 8*60, 24*60)
-                # Calculate window start time by rounding down to the nearest window_length
-                window_start = current_timestamp - timedelta(minutes=current_timestamp.minute % window_length, 
-                                                            seconds=current_timestamp.second, 
-                                                            microseconds=current_timestamp.microsecond)
-                print(f"Window start = {previous_window_start}")
-
-
-                window_start_str = str(window_start.timestamp())
-                #print(window_start.timestamp().strftime('%Y-%m-%d %H:%M:%S'))
-
-                w = datetime.utcfromtimestamp(window_start.timestamp())
-                print(f"{w} - {keyword}")
-
-                #print(window_start_str.strftime('%Y-%m-%d %H:%M:%S'))
-
-                if window_start_str not in counts:
-                    print(f"Adding window {w} to counts")
-                    counts[window_start_str] = {}
-
-                window_counts = counts[window_start_str]
-
+    
                 # Add new count
                 if keyword not in window_counts:
                     window_counts[keyword] = 0
@@ -66,8 +63,8 @@ def sum_keywords_tumbling(row: dict, state: State, some_param):
                 #print(previous_window_start)
 
                 prev_start_dt = datetime.utcfromtimestamp(previous_window_start)
-                print(f"CURRENT TS: {current_timestamp}")
                 print(f"PREV_START: {prev_start_dt}")
+                print(f"CURRENT TS: {current_timestamp}")
 
                 if current_timestamp > (prev_start_dt + timedelta(minutes=window_length)):
                     print(f"Window ended at {current_timestamp}")
