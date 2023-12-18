@@ -12,7 +12,7 @@ variables:
     defaultValue: transform
     required: false
   - name: window_length
-    inputType: InputTopic
+    inputType: FreeText
     description: ''
     defaultValue: 1
     required: false
