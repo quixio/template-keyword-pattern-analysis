@@ -15,7 +15,7 @@ output_topic = app.topic(os.environ["output"], value_serializer=JSONSerializer()
 
 
 def sum_keywords_tumbling(row: dict, state: State, some_param):
-    state_key = "counts_tumbling_v18-1"  # State key variable
+    state_key = "counts_tumbling_v18-2"  # State key variable
     previous_window_start_state_key = state_key + "_previous_window_start"
 
     # Initialize state if it doesn't exist
