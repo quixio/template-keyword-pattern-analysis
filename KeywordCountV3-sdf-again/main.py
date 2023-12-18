@@ -14,10 +14,19 @@ input_topic = app.topic(os.environ["input"], value_deserializer=QuixDeserializer
 output_topic = app.topic(os.environ["output"], value_serializer=JSONSerializer())
 
 state_key = f"counts_tumbling_v18-{randint(1, 100000)}"  # State key variable
+previous_window_start_state_key = state_key + "_previous_window_start"
+
+
+def check_and_update_prev_window_start(row, state):
+    current_timestamp = datetime.fromtimestamp(row['Timestamp'] / 1e9)
+    previous_window_start = state.get(previous_window_start_state_key, "") # if not set, default to current
+    if previous_window_start == "":
+        previous_window_start = current_timestamp.timestamp()
+        print(f"Setting {previous_window_start_state_key} state to {previous_window_start}")
+        state.set(previous_window_start_state_key, previous_window_start)
 
 
 def sum_keywords_tumbling(row: dict, state: State, some_param):
-    previous_window_start_state_key = state_key + "_previous_window_start"
 
     # Initialize state if it doesn't exist
     counts = state.get(state_key, {})
@@ -25,11 +34,7 @@ def sum_keywords_tumbling(row: dict, state: State, some_param):
 
     # Get current timestamp
     current_timestamp = datetime.fromtimestamp(row['Timestamp'] / 1e9)
-    previous_window_start = state.get(previous_window_start_state_key, "") # if not set, default to current
-    if previous_window_start == "":
-        previous_window_start = current_timestamp.timestamp()
-        print(f"Setting {previous_window_start_state_key} state to {previous_window_start}")
-        state.set(previous_window_start_state_key, previous_window_start)
+    check_and_update_prev_window_start(row, state)
 
     # Update counts
     for keyword, _ in row.items():
@@ -73,6 +78,7 @@ def sum_keywords_tumbling(row: dict, state: State, some_param):
 
                 if current_timestamp > (prev_start_dt + timedelta(minutes=window_length)):
                     print(f"Window ended at {current_timestamp}")
+
 
                 # Check if the window has ended
                 # if keyword in window_counts and datetime.fromtimestamp(float(max(window_counts[keyword].keys()))) >= window_start + timedelta(minutes=window_length):
