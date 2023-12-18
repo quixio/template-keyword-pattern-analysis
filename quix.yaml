@@ -81,7 +81,7 @@ deployments:
   - name: tempsrc
     application: tempsrc
     deploymentType: Service
-    version: 2abe0caf03304863a0c2b8d7b052c6334d42f26d
+    version: 44634c9866787efb49fabd189e0b76a5e4a881aa
     resources:
       cpu: 200
       memory: 500
