@@ -35,7 +35,7 @@ def sum_keywords_tumbling(row: dict, state: State, some_param):
                                                             microseconds=current_timestamp.microsecond)
 
                 window_start_str = str(window_start.timestamp())
-
+                print(window_start_str)
                 if window_start_str not in counts:
                     counts[window_start_str] = {}
 
