@@ -28,6 +28,7 @@ def sum_keywords_tumbling(row: dict, state: State, some_param):
     # Update counts
     for keyword, _ in row.items():
         if keyword != 'Timestamp':
+            print(keyword)
             for window_length in [1]:  # Window lengths in minutes (, 60, 4*60, 8*60, 24*60)
                 # Calculate window start time by rounding down to the nearest window_length
                 window_start = current_timestamp - timedelta(minutes=current_timestamp.minute % window_length, 
