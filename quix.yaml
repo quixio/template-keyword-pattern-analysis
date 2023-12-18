@@ -143,6 +143,26 @@ deployments:
         description: ''
         required: false
         value: 30
+  - name: Tumble Trans 1
+    application: tumble_transform
+    deploymentType: Service
+    version: 782d97300f8a5da4868b7697b9acb9a2431c0a9d
+    resources:
+      cpu: 200
+      memory: 500
+      replicas: 1
+    desiredStatus: Running
+    variables:
+      - name: input
+        inputType: InputTopic
+        description: Name of the input topic to listen to.
+        required: false
+        value: transform
+      - name: output
+        inputType: OutputTopic
+        description: Name of the output topic to write to.
+        required: false
+        value: transform
 
 # This section describes the Topics of the data pipeline
 topics:
