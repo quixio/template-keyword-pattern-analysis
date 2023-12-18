@@ -3,6 +3,7 @@ import time
 import datetime
 import math
 import os
+import random
 
 
 # Quix injects credentials automatically to the client. 
@@ -27,10 +28,27 @@ print("Sending values for 30 seconds.")
 #     ],
 
 for index in range(0, 3000 * 10000):
+
+    # List of 10 different words
+    words = ['database', 'oreo', 'python', 'java', 'javascript', 'html', 'css', 'sql', 'ruby', 'php']
+
+    # Generate 1 to 4 items
+    num_items = random.randint(1, 4)
+
+    # Generate the string
+    result = []
+    for _ in range(num_items):
+        word = random.choice(words)
+        score = round(random.uniform(0, 1), 3)
+        result.append((word, score))
+
+    # Convert the list to a string
+    result_str = str(result)
+
     stream.timeseries \
         .buffer \
         .add_timestamp(datetime.datetime.utcnow()) \
-        .add_value("extracted_keywords", "[('database', 0.655)]") \
+        .add_value("extracted_keywords", result_str) \
         .publish()
     time.sleep(0.5)
 
