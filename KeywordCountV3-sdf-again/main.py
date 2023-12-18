@@ -34,17 +34,9 @@ def sum_keywords_tumbling(row: dict, state: State, some_param):
 
     window_length  = 1
 
-    #window_start = current_timestamp - timedelta(minutes=current_timestamp.minute)
     window_start = previous_window_start
-    #print(f"Window start = {window_start}")
 
     window_start_str = str(datetime.utcfromtimestamp(window_start))
-    #window_start_dt = datetime.utcfromtimestamp(window_start)
-    #print(window_start.timestamp().strftime('%Y-%m-%d %H:%M:%S'))
-
-    #w = datetime.utcfromtimestamp(window_start_dt.timestamp())
-
-    #print(window_start_str.strftime('%Y-%m-%d %H:%M:%S'))
 
     if window_start_str not in counts:
         #print(f"Adding window {w} to counts")
@@ -87,21 +79,8 @@ def sum_keywords_tumbling(row: dict, state: State, some_param):
         state.set(previous_window_start_state_key, previous_window_start)
     else:
         print(keyword)
-        print("B")
         ended_window = {}
 
-                # Check if the window has ended
-                # if keyword in window_counts and datetime.fromtimestamp(float(max(window_counts[keyword].keys()))) >= window_start + timedelta(minutes=window_length):
-                #     # Print a message when a window ends
-                #     print(f"Window ended at {window_start_str}")
-                #     if window_start_str not in ended_windows:
-                #         ended_windows[window_start_str] = {}
-                #     ended_windows[window_start_str][keyword] = sum(window_counts[keyword].values())
-                #     # Reset the counts for the keyword in the current window
-                #     counts[window_start_str][keyword] = {}
-
-    # key/streamid = window id (e,.g, 15min)
-    # emit 1 row per keyword
 
     state.set(state_key, counts)
     print(f"Tx: {ended_window}")
