@@ -96,7 +96,7 @@ deployments:
   - name: Tumble 1 min
     application: KeywordCountV3-sdf-again
     deploymentType: Service
-    version: 46245aa5bf08b6474b8756a732e11fd4a1bcd642
+    version: 290bd994a0924f0476404c3af7e4b53d7d8ffd76
     resources:
       cpu: 200
       memory: 500
