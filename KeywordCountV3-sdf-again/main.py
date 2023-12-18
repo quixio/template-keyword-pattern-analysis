@@ -17,11 +17,12 @@ state_key = f"counts_tumbling_v18-{randint(1, 100000)}"  # State key variable
 
 
 def sum_keywords_tumbling(row: dict, state: State, some_param):
+    
     previous_window_start_state_key = state_key + "_previous_window_start"
 
     # Initialize state if it doesn't exist
     counts = state.get(state_key, {})
-    ended_windows = {}  # Store ended windows
+    ended_window = {}  # Store ended windows
 
      # Get current timestamp
     current_timestamp = datetime.fromtimestamp(row['Timestamp'] / 1e9)
@@ -74,11 +75,15 @@ def sum_keywords_tumbling(row: dict, state: State, some_param):
 
                 print("Current window data:")
                 print(counts[window_start_str])
+                ended_window = counts[window_start_str]
+
+                counts[window_start_str] = {}
                 
                 previous_window_start = current_timestamp.timestamp()
                 print(f"Setting {previous_window_start_state_key} state to {previous_window_start}")
                 state.set(previous_window_start_state_key, previous_window_start)
-                
+            else:
+                ended_window = {}
 
                 # Check if the window has ended
                 # if keyword in window_counts and datetime.fromtimestamp(float(max(window_counts[keyword].keys()))) >= window_start + timedelta(minutes=window_length):
@@ -94,7 +99,7 @@ def sum_keywords_tumbling(row: dict, state: State, some_param):
     # emit 1 row per keyword
 
     state.set(state_key, counts)
-    return json.dumps(ended_windows)  # Return ended windows as JSON
+    return json.dumps(ended_window)  # Return ended windows as JSON
 
 
 
