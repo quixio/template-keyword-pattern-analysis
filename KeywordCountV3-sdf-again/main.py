@@ -16,15 +16,18 @@ output_topic = app.topic(os.environ["output"], value_serializer=JSONSerializer()
 
 def sum_keywords_tumbling(row: dict, state: State, some_param):
     state_key = "counts_tumbling_v18-1"  # State key variable
+    previous_window_start_state_key = state_key + "_previous_window_start"
 
     # Initialize state if it doesn't exist
     counts = state.get(state_key, {})
-
     ended_windows = {}  # Store ended windows
 
     # Get current timestamp
     current_timestamp = datetime.fromtimestamp(row['Timestamp'] / 1e9)
-    previous_window_start = state.get(state_key + "_previous_window_start", current_timestamp) # if not set, default to current
+    previous_window_start = state.get(previous_window_start_state_key, "") # if not set, default to current
+    if previous_window_start == "":
+        print(f"Setting {previous_window_start_state_key}")
+        state.set(previous_window_start_state_key, current_timestamp)
 
     # Update counts
     for keyword, _ in row.items():
@@ -60,7 +63,7 @@ def sum_keywords_tumbling(row: dict, state: State, some_param):
                 print("Current window data:")
                 print(counts[window_start_str])
                 
-                if current_timestamp > (window_start + timedelta(minutes=window_length)):
+                if current_timestamp > (previous_window_start + timedelta(minutes=window_length)):
                     print(f"Window ended at {current_timestamp}")
 
                 # Check if the window has ended
