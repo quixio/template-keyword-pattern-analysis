@@ -84,6 +84,7 @@ def sum_keywords_tumbling(row: dict, state: State, some_param):
                 #print(f"Setting {previous_window_start_state_key} state to {previous_window_start}")
                 state.set(previous_window_start_state_key, previous_window_start)
             else:
+                print(keyword)
                 print("B")
                 ended_window = {}
 
