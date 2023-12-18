@@ -24,6 +24,7 @@ def sum_keywords_tumbling(row: dict, state: State, some_param):
 
     # Get current timestamp
     current_timestamp = datetime.fromtimestamp(row['Timestamp'] / 1e9)
+    previous_window_start = state.get(state_key + "_previous_window_start", current_timestamp) # if not set, default to current
 
     # Update counts
     for keyword, _ in row.items():
@@ -33,6 +34,8 @@ def sum_keywords_tumbling(row: dict, state: State, some_param):
                 window_start = current_timestamp - timedelta(minutes=current_timestamp.minute % window_length, 
                                                             seconds=current_timestamp.second, 
                                                             microseconds=current_timestamp.microsecond)
+                print(f"Window start = {previous_window_start}")
+
 
                 window_start_str = str(window_start.timestamp())
                 #print(window_start.timestamp().strftime('%Y-%m-%d %H:%M:%S'))
