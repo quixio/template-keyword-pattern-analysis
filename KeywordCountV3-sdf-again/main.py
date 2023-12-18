@@ -37,7 +37,7 @@ def sum_keywords_tumbling(row: dict, state: State, some_param):
     window_start = previous_window_start
     print(f"Window start = {window_start}")
 
-    window_start_str = str(datetime.utcfromtimestamp(window_start).timestamp())
+    window_start_str = str(datetime.utcfromtimestamp(window_start))
     #print(window_start.timestamp().strftime('%Y-%m-%d %H:%M:%S'))
 
     w = datetime.utcfromtimestamp(window_start.timestamp())
