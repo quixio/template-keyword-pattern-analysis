@@ -24,7 +24,8 @@ def on_dataframe_received_handler(stream_consumer: qx.StreamConsumer, df: pd.Dat
 def on_event_data_received_handler(stream_consumer: qx.StreamConsumer, data: qx.EventData):
  #   if data.value != "{}":
     #print(data.value)
-    print(json.loads(data.value))
+    for key in json.loads(data.value):
+        print(key)
     # handle your event data here
 
 
