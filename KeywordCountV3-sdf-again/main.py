@@ -48,6 +48,9 @@ def sum_keywords_tumbling(row: dict, state: State, some_param):
 
                 window_counts = counts[window_start_str]
 
+                print("Current window data:")
+                print(counts[window_start_str])
+
                 # Add new count
                 if keyword not in window_counts:
                     window_counts[keyword] = {}
