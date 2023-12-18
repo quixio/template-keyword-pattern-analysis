@@ -8,7 +8,7 @@ from quixstreams.kafka import Producer
 import json
 
 
-app = Application.Quix("keywords-10", auto_offset_reset="latest")
+app = Application.Quix("keywords-20", auto_offset_reset="latest")
 input_topic = app.topic(os.environ["input"], value_deserializer=QuixDeserializer())
 output_topic = app.topic(os.environ["output"], value_serializer=JSONSerializer())
 
