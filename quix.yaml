@@ -137,7 +137,7 @@ deployments:
         inputType: OutputTopic
         description: Name of the output topic to write to.
         required: false
-        value: transform
+        value: transform-30
       - name: window_length
         inputType: FreeText
         description: ''
@@ -189,6 +189,13 @@ topics:
       retentionInMinutes: 1440
       retentionInBytes: 52428800
   - name: 1
+    persisted: false
+    configuration:
+      partitions: 1
+      replicationFactor: 2
+      retentionInMinutes: 1440
+      retentionInBytes: 52428800
+  - name: transform-30
     persisted: false
     configuration:
       partitions: 1
