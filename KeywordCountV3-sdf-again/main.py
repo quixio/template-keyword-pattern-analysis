@@ -99,7 +99,7 @@ def sum_keywords_tumbling(row: dict, state: State, some_param):
     # emit 1 row per keyword
 
     state.set(state_key, counts)
-    return json.dumps(ended_window)  # Return ended windows as JSON
+    return json.dumps(ended_window)  # Return ended window as JSON
 
 
 
