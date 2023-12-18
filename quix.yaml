@@ -162,7 +162,7 @@ deployments:
         inputType: OutputTopic
         description: Name of the output topic to write to.
         required: false
-        value: transform
+        value: transform-no-blanks
   - name: Tumble Trans 1
     application: tumble_transform
     deploymentType: Service
