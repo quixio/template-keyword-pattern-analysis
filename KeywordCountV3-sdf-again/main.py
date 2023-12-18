@@ -15,7 +15,7 @@ output_topic = app.topic(os.environ["output"], value_serializer=JSONSerializer()
 
 
 def sum_keywords_tumbling(row: dict, state: State, some_param):
-    state_key = "counts_tumbling_v18-3"  # State key variable
+    state_key = "counts_tumbling_v18-4"  # State key variable
     previous_window_start_state_key = state_key + "_previous_window_start"
 
     # Initialize state if it doesn't exist
@@ -26,8 +26,9 @@ def sum_keywords_tumbling(row: dict, state: State, some_param):
     current_timestamp = datetime.fromtimestamp(row['Timestamp'] / 1e9)
     previous_window_start = state.get(previous_window_start_state_key, "") # if not set, default to current
     if previous_window_start == "":
-        print(f"Setting {previous_window_start_state_key} state to {current_timestamp.timestamp()}")
-        state.set(previous_window_start_state_key, current_timestamp.timestamp())
+        previous_window_start = current_timestamp.timestamp()
+        print(f"Setting {previous_window_start_state_key} state to {previous_window_start}")
+        state.set(previous_window_start_state_key, previous_window_start)
 
     # Update counts
     for keyword, _ in row.items():
