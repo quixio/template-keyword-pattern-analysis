@@ -158,7 +158,7 @@ def sdf_way():
     #sdf = sdf.apply(sum_keywords, stateful=True)
     #sdf = sdf.apply(lambda row, state: sum_keywords(row, state, "thing"), stateful=True)
     sdf = sdf.apply(lambda row, state: sum_keywords_tumbling(row, state, "thing"), stateful=True)
-    sdf = sdf.to_topic(output_topic)
+    sdf = sdf.to_topic(output_topic, key=f"{window_length}_min_window")
     return sdf
 
 sdf = sdf_way()
