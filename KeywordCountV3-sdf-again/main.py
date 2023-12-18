@@ -46,16 +46,12 @@ def sum_keywords_tumbling(row: dict, state: State, some_param):
     # Update counts
     for keyword, _ in row.items():
         if keyword != 'Timestamp': #and "database" in keyword
-
             
             # Add new count
             if keyword not in window_counts:
                 window_counts[keyword] = 0
 
             window_counts[keyword] = window_counts[keyword] + 1
-
-            #print("xoxoxox")
-            #print(previous_window_start)
 
             prev_start_dt = datetime.utcfromtimestamp(previous_window_start)
 
@@ -77,7 +73,6 @@ def sum_keywords_tumbling(row: dict, state: State, some_param):
         #print(f"Setting {previous_window_start_state_key} state to {previous_window_start}")
         state.set(previous_window_start_state_key, previous_window_start)
     else:
-        print(keyword)
         ended_window = {}
 
 
