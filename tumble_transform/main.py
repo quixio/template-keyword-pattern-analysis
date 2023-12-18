@@ -26,6 +26,8 @@ def on_event_data_received_handler(stream_consumer: qx.StreamConsumer, data: qx.
     #print(data.value)
     if json.loads(data.value)[0] == "{" and json.loads(data.value)[1] == "}":
         print("YES")
+    else:
+        print(data)
     # handle your event data here
 
 
