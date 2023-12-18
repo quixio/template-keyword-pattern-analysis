@@ -70,23 +70,23 @@ def sum_keywords_tumbling(row: dict, state: State, some_param):
             print(f"PREV_START: {prev_start_dt}")
             print(f"CURRENT TS: {current_timestamp}")
 
-            if current_timestamp > (prev_start_dt + timedelta(minutes=window_length)):
-                print(f"Window ended at {current_timestamp}")
+    if current_timestamp > (prev_start_dt + timedelta(minutes=window_length)):
+        print(f"Window ended at {current_timestamp}")
 
-                #print("Current window data:")
-                print(counts[window_start_str])
-                ended_window = counts[window_start_str]
+        #print("Current window data:")
+        print(counts[window_start_str])
+        ended_window = counts[window_start_str]
 
-                counts[window_start_str] = {}
-                counts.pop(window_start_str)
-                
-                previous_window_start = current_timestamp.timestamp()
-                #print(f"Setting {previous_window_start_state_key} state to {previous_window_start}")
-                state.set(previous_window_start_state_key, previous_window_start)
-            else:
-                print(keyword)
-                print("B")
-                ended_window = {}
+        counts[window_start_str] = {}
+        counts.pop(window_start_str)
+        
+        previous_window_start = current_timestamp.timestamp()
+        #print(f"Setting {previous_window_start_state_key} state to {previous_window_start}")
+        state.set(previous_window_start_state_key, previous_window_start)
+    else:
+        print(keyword)
+        print("B")
+        ended_window = {}
 
                 # Check if the window has ended
                 # if keyword in window_counts and datetime.fromtimestamp(float(max(window_counts[keyword].keys()))) >= window_start + timedelta(minutes=window_length):
