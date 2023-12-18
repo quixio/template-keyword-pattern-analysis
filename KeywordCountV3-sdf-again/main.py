@@ -56,6 +56,9 @@ def sum_keywords_tumbling(row: dict, state: State, some_param):
                     # Reset the counts for the keyword in the current window
                     counts[window_start_str][keyword] = {}
 
+    # key/streamid = window id (e,.g, 15min)
+    # emit 1 row per keyword
+    
     state.set(state_key, counts)
     return json.dumps(ended_windows)  # Return ended windows as JSON
 
