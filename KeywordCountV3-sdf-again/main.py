@@ -14,7 +14,7 @@ input_topic = app.topic(os.environ["input"], value_deserializer=QuixDeserializer
 output_topic = app.topic(os.environ["output"], value_serializer=JSONSerializer())
 
 state_key = f"counts_tumbling_v18-{randint(1, 100000)}"  # State key variable
-window_length = os.getenv("window_length", 1)
+window_length = int(os.getenv("window_length", 1))
 
 
 def sum_keywords_tumbling(row: dict, state: State, some_param):
