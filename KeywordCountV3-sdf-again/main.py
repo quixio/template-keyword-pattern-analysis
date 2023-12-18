@@ -25,6 +25,8 @@ def check_and_update_prev_window_start(row, state):
         print(f"Setting {previous_window_start_state_key} state to {previous_window_start}")
         state.set(previous_window_start_state_key, previous_window_start)
 
+    return previous_window_start
+
 
 def sum_keywords_tumbling(row: dict, state: State, some_param):
 
@@ -44,7 +46,7 @@ def sum_keywords_tumbling(row: dict, state: State, some_param):
                 window_start = current_timestamp - timedelta(minutes=current_timestamp.minute % window_length, 
                                                             seconds=current_timestamp.second, 
                                                             microseconds=current_timestamp.microsecond)
-                print(f"Window start = {previous_window_start}")
+                #print(f"Window start = {previous_window_start}")
 
 
                 window_start_str = str(window_start.timestamp())
