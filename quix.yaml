@@ -118,6 +118,31 @@ deployments:
         description: ''
         required: false
         value: 1
+  - name: Tumble 30 min
+    application: KeywordCountV3-sdf-again
+    deploymentType: Service
+    version: 46245aa5bf08b6474b8756a732e11fd4a1bcd642
+    resources:
+      cpu: 200
+      memory: 500
+      replicas: 1
+    desiredStatus: Running
+    variables:
+      - name: input
+        inputType: InputTopic
+        description: Name of the input topic to listen to.
+        required: false
+        value: csv-data
+      - name: output
+        inputType: OutputTopic
+        description: Name of the output topic to write to.
+        required: false
+        value: transform
+      - name: window_length
+        inputType: FreeText
+        description: ''
+        required: false
+        value: 30
 
 # This section describes the Topics of the data pipeline
 topics:
