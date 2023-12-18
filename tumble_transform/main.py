@@ -1,7 +1,7 @@
 import quixstreams as qx
 import os
 import pandas as pd
-
+import json
 
 client = qx.QuixStreamingClient()
 
@@ -23,7 +23,8 @@ def on_dataframe_received_handler(stream_consumer: qx.StreamConsumer, df: pd.Dat
 # Handle event data from samples that emit event data
 def on_event_data_received_handler(stream_consumer: qx.StreamConsumer, data: qx.EventData):
  #   if data.value != "{}":
-    print(data.value.type())
+    #print(data.value)
+    print(json.loads(data.value))
     # handle your event data here
 
 
