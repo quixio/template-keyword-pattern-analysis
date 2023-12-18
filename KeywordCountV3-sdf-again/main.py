@@ -9,12 +9,13 @@ import json
 from random import random, randint
 
 
-app = Application.Quix("keywords-20", auto_offset_reset="latest")
+window_length = int(os.getenv("window_length", 1))
+
+app = Application.Quix(f"keywords-v6-{window_length}", auto_offset_reset="latest")
 input_topic = app.topic(os.environ["input"], value_deserializer=QuixDeserializer())
 output_topic = app.topic(os.environ["output"], value_serializer=JSONSerializer())
 
 state_key = f"counts_tumbling_v18-{randint(1, 100000)}"  # State key variable
-window_length = int(os.getenv("window_length", 1))
 
 
 def sum_keywords_tumbling(row: dict, state: State, some_param):
