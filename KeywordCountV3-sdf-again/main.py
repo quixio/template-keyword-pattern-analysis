@@ -31,51 +31,53 @@ def sum_keywords_tumbling(row: dict, state: State, some_param):
         print(f"Setting {previous_window_start_state_key} state to {previous_window_start}")
         state.set(previous_window_start_state_key, previous_window_start)
 
+    window_length  = 1
+
+    #window_start = current_timestamp - timedelta(minutes=current_timestamp.minute)
+    window_start = previous_window_start
+    print(f"Window start = {window_start}")
+
+    window_start_str = str(window_start.timestamp())
+    #print(window_start.timestamp().strftime('%Y-%m-%d %H:%M:%S'))
+
+    w = datetime.utcfromtimestamp(window_start.timestamp())
+
+    #print(window_start_str.strftime('%Y-%m-%d %H:%M:%S'))
+
+    if window_start_str not in counts:
+        print(f"Adding window {w} to counts")
+        counts[window_start_str] = {}
+
+    window_counts = counts[window_start_str]
+    
     # Update counts
     for keyword, _ in row.items():
         if keyword != 'Timestamp': #and "database" in keyword
-            for window_length in [1]:  # Window lengths in minutes (, 60, 4*60, 8*60, 24*60)
-    
-                window_start = current_timestamp - timedelta(minutes=current_timestamp.minute)
-                print(f"Window start = {previous_window_start}")
 
-                window_start_str = str(window_start.timestamp())
-                #print(window_start.timestamp().strftime('%Y-%m-%d %H:%M:%S'))
+            
+            # Add new count
+            if keyword not in window_counts:
+                window_counts[keyword] = 0
 
-                w = datetime.utcfromtimestamp(window_start.timestamp())
-                #print(f"{w} - {keyword}")
+            window_counts[keyword] = window_counts[keyword] + 1
 
-                #print(window_start_str.strftime('%Y-%m-%d %H:%M:%S'))
+            #print("xoxoxox")
+            #print(previous_window_start)
 
-                if window_start_str not in counts:
-                    print(f"Adding window {w} to counts")
-                    counts[window_start_str] = {}
+            prev_start_dt = datetime.utcfromtimestamp(previous_window_start)
+            print(f"PREV_START: {prev_start_dt}")
+            print(f"CURRENT TS: {current_timestamp}")
 
-                window_counts = counts[window_start_str]
+            if current_timestamp > (prev_start_dt + timedelta(minutes=window_length)):
+                print(f"Window ended at {current_timestamp}")
+
+                print("Current window data:")
+                print(counts[window_start_str])
                 
-                # Add new count
-                if keyword not in window_counts:
-                    window_counts[keyword] = 0
-
-                window_counts[keyword] = window_counts[keyword] + 1
-
-                #print("xoxoxox")
-                #print(previous_window_start)
-
-                prev_start_dt = datetime.utcfromtimestamp(previous_window_start)
-                print(f"PREV_START: {prev_start_dt}")
-                print(f"CURRENT TS: {current_timestamp}")
-
-                if current_timestamp > (prev_start_dt + timedelta(minutes=window_length)):
-                    print(f"Window ended at {current_timestamp}")
-
-                    print("Current window data:")
-                    print(counts[window_start_str])
-                    
-                    previous_window_start = current_timestamp.timestamp()
-                    print(f"Setting {previous_window_start_state_key} state to {previous_window_start}")
-                    state.set(previous_window_start_state_key, previous_window_start)
-                    
+                previous_window_start = current_timestamp.timestamp()
+                print(f"Setting {previous_window_start_state_key} state to {previous_window_start}")
+                state.set(previous_window_start_state_key, previous_window_start)
+                
 
                 # Check if the window has ended
                 # if keyword in window_counts and datetime.fromtimestamp(float(max(window_counts[keyword].keys()))) >= window_start + timedelta(minutes=window_length):
