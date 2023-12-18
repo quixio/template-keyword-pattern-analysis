@@ -26,8 +26,8 @@ def sum_keywords_tumbling(row: dict, state: State, some_param):
     current_timestamp = datetime.fromtimestamp(row['Timestamp'] / 1e9)
     previous_window_start = state.get(previous_window_start_state_key, "") # if not set, default to current
     if previous_window_start == "":
-        print(f"Setting {previous_window_start_state_key}")
-        state.set(previous_window_start_state_key, current_timestamp)
+        print(f"Setting {previous_window_start_state_key} state to {current_timestamp.timestamp()}")
+        state.set(previous_window_start_state_key, current_timestamp.timestamp())
 
     # Update counts
     for keyword, _ in row.items():
