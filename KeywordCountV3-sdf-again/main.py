@@ -13,10 +13,10 @@ app = Application.Quix("keywords-20", auto_offset_reset="latest")
 input_topic = app.topic(os.environ["input"], value_deserializer=QuixDeserializer())
 output_topic = app.topic(os.environ["output"], value_serializer=JSONSerializer())
 
+state_key = f"counts_tumbling_v18-{randint(1, 100000)}"  # State key variable
 
 
 def sum_keywords_tumbling(row: dict, state: State, some_param):
-    state_key = f"counts_tumbling_v18-{randint(1, 100000)}"  # State key variable
     previous_window_start_state_key = state_key + "_previous_window_start"
 
     # Initialize state if it doesn't exist
