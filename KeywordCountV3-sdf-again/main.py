@@ -37,12 +37,13 @@ def sum_keywords_tumbling(row: dict, state: State, some_param):
                 window_start_str = str(window_start.timestamp())
                 #print(window_start.timestamp().strftime('%Y-%m-%d %H:%M:%S'))
 
-                print(f"{datetime.utcfromtimestamp(window_start.timestamp())} - {keyword}")
+                w = datetime.utcfromtimestamp(window_start.timestamp())
+                print(f"{w} - {keyword}")
 
                 #print(window_start_str.strftime('%Y-%m-%d %H:%M:%S'))
 
-
                 if window_start_str not in counts:
+                    print(f"Adding window {w} to counts")
                     counts[window_start_str] = {}
 
                 window_counts = counts[window_start_str]
