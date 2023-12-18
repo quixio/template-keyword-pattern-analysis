@@ -67,10 +67,11 @@ def sum_keywords_tumbling(row: dict, state: State, some_param):
                 print("xoxoxox")
                 print(previous_window_start)
 
-                print(datetime.utcfromtimestamp(previous_window_start))
+                prev_start_dt = datetime.utcfromtimestamp(previous_window_start)
+                print(prev_start_dt)
 
-                # if current_timestamp > (previous_window_start + timedelta(minutes=window_length)):
-                #     print(f"Window ended at {current_timestamp}")
+                if current_timestamp > (prev_start_dt + timedelta(minutes=window_length)):
+                    print(f"Window ended at {current_timestamp}")
 
                 # Check if the window has ended
                 # if keyword in window_counts and datetime.fromtimestamp(float(max(window_counts[keyword].keys()))) >= window_start + timedelta(minutes=window_length):
