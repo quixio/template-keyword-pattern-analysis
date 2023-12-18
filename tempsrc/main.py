@@ -30,7 +30,7 @@ for index in range(0, 3000 * 10000):
     stream.timeseries \
         .buffer \
         .add_timestamp(datetime.datetime.utcnow()) \
-        .add_value("extracted_keywords", [("database", 0.655)]) \
+        .add_value("extracted_keywords", "[('database', 0.655)]") \
         .publish()
     time.sleep(0.5)
 
