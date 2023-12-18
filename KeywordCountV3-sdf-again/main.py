@@ -14,6 +14,7 @@ input_topic = app.topic(os.environ["input"], value_deserializer=QuixDeserializer
 output_topic = app.topic(os.environ["output"], value_serializer=JSONSerializer())
 
 state_key = f"counts_tumbling_v18-{randint(1, 100000)}"  # State key variable
+window_length = os.getenv("window_length", 1)
 
 
 def sum_keywords_tumbling(row: dict, state: State, some_param):
@@ -31,8 +32,6 @@ def sum_keywords_tumbling(row: dict, state: State, some_param):
         previous_window_start = current_timestamp.timestamp()
         #print(f"Setting {previous_window_start_state_key} state to {previous_window_start}")
         state.set(previous_window_start_state_key, previous_window_start)
-
-    window_length  = 1
 
     window_start = previous_window_start
 
