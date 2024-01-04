@@ -9,7 +9,7 @@ variables:
   - name: redis_host
     inputType: FreeText
     description: Host address for the Redis instance
-    defaultValue: ''
+    defaultValue: redis-14169.c72.eu-west-1-2.ec2.cloud.redislabs.com
     required: true
   - name: redis_port
     inputType: FreeText
