@@ -53,10 +53,10 @@ deployments:
   - name: Tumble 1 min
     application: KeywordCountV3-sdf-again
     deploymentType: Service
-    version: 542e5cd6ae3c9e0073ca7c001d9819d6b5a7ec7a
+    version: 7db373a7bbc2d728834249bf8d95ef919175eda2
     resources:
-      cpu: 200
-      memory: 500
+      cpu: 1000
+      memory: 1100
       replicas: 1
     desiredStatus: Stopped
     variables:
