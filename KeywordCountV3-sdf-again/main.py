@@ -60,12 +60,15 @@ def sum_keywords_tumbling(row: dict, state: State, some_param):
     print(f"WINDOW START: {prev_start_dt}")
     print(f"CURRNT TSTMP: {current_timestamp}")
 
+    result = []
+
     if current_timestamp > (prev_start_dt + timedelta(minutes=window_length)):
         print(f"Window ended at {current_timestamp}")
 
         #print("Current window data:")
         print(counts[window_start_str])
-        ended_window = counts[window_start_str]
+        #ended_window = counts[window_start_str]
+        result.append(counts[window_start_str])
 
         counts[window_start_str] = {}
         counts.pop(window_start_str)
@@ -73,13 +76,13 @@ def sum_keywords_tumbling(row: dict, state: State, some_param):
         previous_window_start = current_timestamp.timestamp()
         #print(f"Setting {previous_window_start_state_key} state to {previous_window_start}")
         state.set(previous_window_start_state_key, previous_window_start)
-    else:
-        ended_window = None
+    #else:
+    #    ended_window = None
 
 
     state.set(state_key, counts)
     print(f"returning: {ended_window}")
-    return ended_window  # Return ended window as JSON
+    return result # Return ended window
 
 
 
