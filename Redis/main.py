@@ -29,10 +29,10 @@ def send_data_to_redis(value: dict) -> None:
         return
 
     print(f"Timestamp: {timestamp}, Number of keys: {len(valid_keys)}")
-    pipe = r.pipeline()
-    for key in valid_keys:
-        pipe.ts().add(key=key, timestamp=timestamp, value=value[key], labels=tags)
-    pipe.execute()
+    # pipe = r.pipeline()
+    # for key in valid_keys:
+    #     pipe.ts().add(key=key, timestamp=timestamp, value=value[key], labels=tags)
+    # pipe.execute()
 
 
 sdf = app.dataframe(input_topic)
