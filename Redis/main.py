@@ -1,5 +1,5 @@
 from quixstreams import Application
-from quixstreams.models.serializers.quix import QuixDeserializer
+from quixstreams.models.serializers.quix import QuixDeserializer, JSONDeserializer
 
 import os
 import redis
@@ -13,7 +13,7 @@ r = redis.Redis(
 
 app = Application.Quix(consumer_group="redis-destination")
 
-input_topic = app.topic(os.environ["input"], value_deserializer=QuixDeserializer())
+input_topic = app.topic(os.environ["input"], value_deserializer=JSONDeserializer())
 
 
 def send_data_to_redis(value: dict) -> None:
