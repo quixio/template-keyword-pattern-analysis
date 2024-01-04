@@ -11,6 +11,8 @@ r = redis.Redis(
     username=os.environ['redis_username'] if 'redis_username' in os.environ else None,
     decode_responses=True)
 
+storage_key = os.environ['storage_key']
+
 app = Application.Quix(consumer_group="redis-destination")
 
 input_topic = app.topic(os.environ["input"], value_deserializer=JSONDeserializer())
@@ -19,20 +21,9 @@ input_topic = app.topic(os.environ["input"], value_deserializer=JSONDeserializer
 def send_data_to_redis(value: dict) -> None:
     print(value)
 
-    tags = value["Tags"]
-    timestamp = int(value["Timestamp"] / 1e6)  # nanoseconds to milliseconds
-
-    valid_keys = [x for x in value.keys() if x not in ["Timestamp", "Tags"] and value[x] is not None and (
-            isinstance(value[x], float) or isinstance(value[x], int))]
-
-    if len(valid_keys) == 0:
-        return
-
-    print(f"Timestamp: {timestamp}, Number of keys: {len(valid_keys)}")
-    # pipe = r.pipeline()
-    # for key in valid_keys:
-    #     pipe.ts().add(key=key, timestamp=timestamp, value=value[key], labels=tags)
-    # pipe.execute()
+    pipe = r.pipeline()
+    pipe.ts().add(key=storage_key, value=value)
+    pipe.execute()
 
 
 sdf = app.dataframe(input_topic)
