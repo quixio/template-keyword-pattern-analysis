@@ -11,7 +11,7 @@ from random import random, randint
 
 window_length = int(os.getenv("window_length", 1))
 
-app = Application.Quix(f"keywords-v6-{window_length}", auto_offset_reset="latest")
+app = Application.Quix(f"keywords-v7-{window_length}", auto_offset_reset="latest")
 input_topic = app.topic(os.environ["input"], value_deserializer=QuixDeserializer())
 output_topic = app.topic(os.environ["output"], value_serializer=JSONSerializer())
 
