@@ -79,7 +79,7 @@ def sum_keywords_tumbling(row: dict, state: State, some_param):
 
     state.set(state_key, counts)
     print(f"returning: {ended_window}")
-    return json.dumps(ended_window)  # Return ended window as JSON
+    return ended_window  # Return ended window as JSON
 
 
 
@@ -159,7 +159,8 @@ def sdf_way():
     #sdf = sdf.apply(sum_keywords, stateful=True)
     #sdf = sdf.apply(lambda row, state: sum_keywords(row, state, "thing"), stateful=True)
     sdf = sdf.apply(lambda row, state: sum_keywords_tumbling(row, state, "thing"), stateful=True)
-    sdf = sdf.to_topic(output_topic)#key=str(f"1_min_window")
+    sdf = sdf[sdf.contains]
+    sdf = sdf.to_topic(output_topic) #key=str(f"1_min_window")
     return sdf
 
 sdf = sdf_way()
