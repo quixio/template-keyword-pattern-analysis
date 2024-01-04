@@ -19,7 +19,7 @@ variables:
   - name: redis_password
     inputType: FreeText
     description: Password for the Redis instance
-    defaultValue: ''
+    defaultValue: FPTZKKjuWHdmVLkBKXcmFj7jYg08OHz8
     required: false
   - name: redis_username
     inputType: FreeText
