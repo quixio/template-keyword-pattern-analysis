@@ -27,7 +27,7 @@ variables:
     defaultValue: default
     required: false
   - name: storage_key
-    inputType: InputTopic
+    inputType: FreeText
     description: ''
     defaultValue: 1min
     required: false
