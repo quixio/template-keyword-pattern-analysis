@@ -14,7 +14,7 @@ variables:
   - name: redis_port
     inputType: FreeText
     description: Port for the Redis instance
-    defaultValue: 6379
+    defaultValue: 14169
     required: true
   - name: redis_password
     inputType: FreeText
