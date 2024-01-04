@@ -20,11 +20,7 @@ input_topic = app.topic(os.environ["input"], value_deserializer=JSONDeserializer
 
 def send_data_to_redis(value: dict) -> None:
     print(value)
-
-    pipe = r.pipeline()
-    pipe.ts().add(key=storage_key, value=value)
-    pipe.execute()
-
+    r.publish(storage_key, value)
 
 sdf = app.dataframe(input_topic)
 sdf = sdf.update(send_data_to_redis)
