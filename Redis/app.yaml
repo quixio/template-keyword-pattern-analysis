@@ -24,7 +24,7 @@ variables:
   - name: redis_username
     inputType: FreeText
     description: Username for the Redis instance
-    defaultValue: ''
+    defaultValue: default
     required: false
 dockerfile: build/dockerfile
 runEntryPoint: main.py
