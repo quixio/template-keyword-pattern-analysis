@@ -4,7 +4,7 @@ variables:
   - name: input
     inputType: InputTopic
     description: This is the input topic
-    defaultValue: input
+    defaultValue: transform
     required: true
   - name: redis_host
     inputType: FreeText
