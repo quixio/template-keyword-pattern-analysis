@@ -44,6 +44,8 @@ def sum_keywords_tumbling(row: dict, state: State, some_param):
 
     window_counts = counts[window_start_str]
     
+    prev_start_dt = None
+
     # Update counts
     for keyword, _ in row.items():
         if keyword != 'Timestamp': #and "database" in keyword
@@ -62,7 +64,7 @@ def sum_keywords_tumbling(row: dict, state: State, some_param):
 
     result = []
 
-    if current_timestamp > (prev_start_dt + timedelta(minutes=window_length)):
+    if prev_start_dt != None & current_timestamp > (prev_start_dt + timedelta(minutes=window_length)):
         print(f"Window ended at {current_timestamp}")
 
         #print("Current window data:")
