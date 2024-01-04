@@ -63,8 +63,10 @@ def sum_keywords_tumbling(row: dict, state: State, some_param):
     print(f"CURRNT TSTMP: {current_timestamp}")
 
     result = []
-
-    if prev_start_dt != None & current_timestamp > (prev_start_dt + timedelta(minutes=window_length)):
+    if prev_start_dt == None:
+        return result
+        
+    if current_timestamp > (prev_start_dt + timedelta(minutes=window_length)):
         print(f"Window ended at {current_timestamp}")
 
         #print("Current window data:")
