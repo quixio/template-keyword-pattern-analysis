@@ -1,0 +1,31 @@
+name: Redis
+language: python
+variables:
+  - name: input
+    inputType: InputTopic
+    description: This is the input topic
+    defaultValue: input
+    required: true
+  - name: redis_host
+    inputType: FreeText
+    description: Host address for the Redis instance
+    defaultValue: ''
+    required: true
+  - name: redis_port
+    inputType: FreeText
+    description: Port for the Redis instance
+    defaultValue: 6379
+    required: true
+  - name: redis_password
+    inputType: FreeText
+    description: Password for the Redis instance
+    defaultValue: ''
+    required: false
+  - name: redis_username
+    inputType: FreeText
+    description: Username for the Redis instance
+    defaultValue: ''
+    required: false
+dockerfile: build/dockerfile
+runEntryPoint: main.py
+defaultFile: main.py
