@@ -81,7 +81,7 @@ def sum_keywords_tumbling(row: dict, state: State, some_param):
 
 
     state.set(state_key, counts)
-    print(f"returning: {ended_window}")
+    print(f"returning: {result}")
     return result # Return ended window
 
 
