@@ -38,6 +38,12 @@ class DataConsumer():
             # see the same view without copying data unnecessarily.
             self.queue.put(self.data)
 
+
+        def on_raw_recv_handler(topic: qx.RawTopicConsumer, msg: qx.RawMessage):
+            print(msg)
+            pass
+
         print("New stream: {}".format(sc.stream_id))
         buf = sc.timeseries.create_buffer()
         buf.on_dataframe_released = on_data_recv_handler
+        buf.on_raw_released = on_raw_recv_handler
