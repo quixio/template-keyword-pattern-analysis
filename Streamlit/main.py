@@ -82,7 +82,7 @@ def data_consumer_init(_queue: DataQueue):
 conid = threading.current_thread().ident
 
 # Blocking queue that exposes Quix data to Streamlit components.
-queue =  queue_init()
+queue = queue_init()
 
 # Data consumer that generates the view model from Quix data for the Streamlit components.
 data_consumer = data_consumer_init(queue)
