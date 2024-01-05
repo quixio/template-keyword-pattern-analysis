@@ -89,7 +89,10 @@ data_consumer = data_consumer_init(queue)
 
 # Event loop to update streamlit components. Try not to copy/modify the dataframes within
 # this loop.
+print("1")
 while True:
+    print("2")
+
     df = queue.get(conid)
     print(df)
     #placeholder_col1.line_chart(df, x="datetime", y=[parameter1])
