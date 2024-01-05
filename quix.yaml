@@ -100,6 +100,46 @@ deployments:
         description: ''
         required: false
         value: 30
+  - name: Redis
+    application: Redis
+    deploymentType: Service
+    version: 0fe6a7c1cc15148c8739da4616a1c8f47f9f7211
+    resources:
+      cpu: 200
+      memory: 500
+      replicas: 1
+    desiredStatus: Running
+    variables:
+      - name: input
+        inputType: InputTopic
+        description: This is the input topic
+        required: true
+        value: transform
+      - name: redis_host
+        inputType: FreeText
+        description: Host address for the Redis instance
+        required: true
+        value: redis-14169.c72.eu-west-1-2.ec2.cloud.redislabs.com
+      - name: redis_port
+        inputType: FreeText
+        description: Port for the Redis instance
+        required: true
+        value: 14169
+      - name: redis_password
+        inputType: FreeText
+        description: Password for the Redis instance
+        required: false
+        value: FPTZKKjuWHdmVLkBKXcmFj7jYg08OHz8
+      - name: redis_username
+        inputType: FreeText
+        description: Username for the Redis instance
+        required: false
+        value: default
+      - name: storage_key
+        inputType: FreeText
+        description: ''
+        required: false
+        value: 1min
 
 # This section describes the Topics of the data pipeline
 topics:
