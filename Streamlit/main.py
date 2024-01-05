@@ -91,8 +91,9 @@ data_consumer = data_consumer_init(queue)
 # this loop.
 while True:
     df = queue.get(conid)
-    placeholder_col1.line_chart(df, x="datetime", y=[parameter1])
-    placeholder_col2.line_chart(df, x="datetime", y=[parameter2])
-    with placeholder_raw.container():
-        st.markdown("### Raw Data View")
-        st.dataframe(df)
+    print(df)
+    #placeholder_col1.line_chart(df, x="datetime", y=[parameter1])
+    #placeholder_col2.line_chart(df, x="datetime", y=[parameter2])
+    #with placeholder_raw.container():
+    #    st.markdown("### Raw Data View")
+    #    st.dataframe(df)
