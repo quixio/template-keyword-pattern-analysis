@@ -140,6 +140,24 @@ deployments:
         description: ''
         required: false
         value: 1min
+  - name: Streamlit
+    application: Streamlit
+    deploymentType: Service
+    version: 37cb7a6730f7718b2f6cdb3b4f477c35727bdbec
+    resources:
+      cpu: 200
+      memory: 500
+      replicas: 1
+    publicAccess:
+      enabled: true
+      urlPrefix: streamlit-37cb7a6
+    desiredStatus: Running
+    variables:
+      - name: input
+        inputType: InputTopic
+        description: Name of the input topic to listen to.
+        required: true
+        value: transform
 
 # This section describes the Topics of the data pipeline
 topics:
