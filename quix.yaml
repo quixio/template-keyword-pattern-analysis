@@ -176,7 +176,7 @@ topics:
       retentionInMinutes: 1440
       retentionInBytes: 52428800
   - name: transform
-    persisted: false
+    persisted: true
     configuration:
       partitions: 2
       replicationFactor: 2
